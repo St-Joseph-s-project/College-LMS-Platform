@@ -8,7 +8,7 @@ import {
   ShoppingBag,
   BarChart3
 } from "lucide-react";
-import { ADMIN_PERMISSIONS, CLIENT_PERMISSIONS } from "./permissions";
+import { ADMIN_PERMISSIONS } from "./permissions";
 import {
   AdminDashboard,
   CreateReward,
@@ -79,27 +79,27 @@ export const ADMIN_ROUTE_MAP: Record<string, RouteConfig> = {
 export const CLIENT_ROUTE_MAP: Record<string, RouteConfig> = {
   DASHBOARD: {
     path: "/dashboard/client",
-    permission: CLIENT_PERMISSIONS.DASHBOARD,
+    permission: "client.access", // Generic permission - not used for filtering
     label: "Dashboard",
     icon: LayoutDashboard({ size: 18 }),
     component: ClientDashboard,
   },
   REWARDS: {
     path: "/dashboard/client/rewards",
-    permission: CLIENT_PERMISSIONS.REWARDS.VIEW,
+    permission: "client.access", // Generic permission - not used for filtering
     label: "Rewards",
     icon: Gift({ size: 18 }),
     children: [
       {
         path: "/dashboard/client/rewards/store",
-        permission: CLIENT_PERMISSIONS.REWARDS.STORE,
+        permission: "client.access", // Generic permission - not used for filtering
         label: "Store",
         icon: ShoppingBag({ size: 18 }),
         component: RewardStore,
       },
       {
         path: "/dashboard/client/rewards/track",
-        permission: CLIENT_PERMISSIONS.REWARDS.TRACK,
+        permission: "client.access", // Generic permission - not used for filtering
         label: "Track",
         icon: BarChart3({ size: 18 }),
         component: RewardTrack,

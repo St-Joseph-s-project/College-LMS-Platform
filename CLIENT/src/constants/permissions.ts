@@ -12,13 +12,9 @@ export const ADMIN_PERMISSIONS = {
   },
 } as const;
 
+// Client permissions - simplified as client routes don't use permission-based filtering
 export const CLIENT_PERMISSIONS = {
-  DASHBOARD: "client.dashboard.view",
-  REWARDS: {
-    VIEW: "client.rewards.view",
-    STORE: "client.rewards.store",
-    TRACK: "client.rewards.track",
-  },
+  ACCESS: "client.access", // Generic permission for all client routes
 } as const;
 
 export const SHARED_PERMISSIONS = {
@@ -44,10 +40,8 @@ export const ADMIN_REWARDS_CREATE = ADMIN_PERMISSIONS.REWARDS.CREATE;
 export const ADMIN_REWARDS_TRACK = ADMIN_PERMISSIONS.REWARDS.TRACK;
 export const ADMIN_REWARDS_HISTORY = ADMIN_PERMISSIONS.REWARDS.HISTORY;
 
-export const CLIENT_DASHBOARD = CLIENT_PERMISSIONS.DASHBOARD;
-export const CLIENT_REWARDS_VIEW = CLIENT_PERMISSIONS.REWARDS.VIEW;
-export const CLIENT_REWARDS_STORE = CLIENT_PERMISSIONS.REWARDS.STORE;
-export const CLIENT_REWARDS_TRACK = CLIENT_PERMISSIONS.REWARDS.TRACK;
+// Client backward compatibility - all routes use generic access permission
+export const CLIENT_ACCESS = CLIENT_PERMISSIONS.ACCESS;
 
 export const NOTIFICATIONS_VIEW = SHARED_PERMISSIONS.NOTIFICATIONS.VIEW;
 export const MESSAGES_VIEW = SHARED_PERMISSIONS.MESSAGES.VIEW;

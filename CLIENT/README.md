@@ -52,15 +52,20 @@ CLIENT/
 │   │   └── appConstants.ts       # General app constants
 │   │
 │   ├── pages/                    # Page components
-│   │   ├── admin/                # Admin pages
-│   │   │   ├── Dashboard.tsx
-│   │   │   ├── CreateReward.tsx
-│   │   │   ├── TrackReward.tsx
-│   │   │   └── HistoryReward.tsx
-│   │   ├── client/               # Client pages
-│   │   │   ├── Dashboard.tsx
-│   │   │   ├── RewardStore.tsx
-│   │   │   └── RewardTrack.tsx
+│   │   ├── admin/  
+|   |   |   ├── <feature_name>/ 
+|   |   |   |  ├──pages #contains all the pages of the feature
+|   |   |   |  |  ├──index.ts #export pages
+|   |   |   |  ├──types #contains all the types
+|   |   |   |  ├──api #contains the api login for each page
+│   │   │   
+│   │   ├── client/  
+|   |   |   ├── <feature_name>/ 
+|   |   |   |  ├──pages #contains all the pages of the feature
+|   |   |   |  |  ├──index.ts #export pages
+|   |   |   |  ├──types #contains all the types
+|   |   |   |  ├──api #contains the api login for each page
+|   |   |
 │   │   └── common/               # Shared pages
 │   │       ├── Login.tsx
 │   │       ├── Page404.tsx
@@ -303,48 +308,6 @@ export const ADMIN_ROUTE_MAP = {
 | `App.tsx` | Main routing setup |
 | `auth.md` | Complete authentication guide |
 
-## 📚 API Integration
-
-### API Client Setup
-
-```typescript
-// api/apiservice.ts
-const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-});
-
-// Request interceptor - adds JWT token
-apiClient.interceptors.request.use((config) => {
-  const token = store.getState().jwtSlice.jwtToken;
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-// Response interceptor - handles errors
-apiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      // Handle unauthorized
-    }
-    return Promise.reject(error);
-  }
-);
-```
-
-### Making API Calls
-
-```typescript
-import { apiClient } from './api/apiservice';
-
-// GET request
-const data = await apiClient.get('/endpoint');
-
-// POST request
-const result = await apiClient.post('/endpoint', { data });
-```
 
 ## 🧪 Development
 

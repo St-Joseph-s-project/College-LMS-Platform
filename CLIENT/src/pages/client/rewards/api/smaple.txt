@@ -1,0 +1,2 @@
+contains the api function like 
+getAllRewards() -> call it in the Page

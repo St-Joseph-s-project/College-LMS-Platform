@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import type { RouteConfig } from "../constants/routeConfig";
 
 interface SidebarProps {

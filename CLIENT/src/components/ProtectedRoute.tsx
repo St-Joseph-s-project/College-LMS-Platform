@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { useAppSelector } from "../redux/hooks";
 import { hasPermission } from "../constants/routeConfig";

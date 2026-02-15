@@ -1,8 +1,8 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminLayout from "./components/layouts/AdminLayout";
 import ClientLayout from "./components/layouts/ClientLayout";
-import { Page404, Unauthorized } from "./pages";
+import { Page404, Unauthorized, Login } from "./pages";
 import { ADMIN_PERMISSIONS, CLIENT_PERMISSIONS } from "./constants/permissions";
 import { ADMIN_ROUTES, CLIENT_ROUTES } from "./constants/routeConfig";
 import { RouteRenderer } from "./config/RouteRenderer";
@@ -12,7 +12,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<Navigate to="/dashboard/client" replace />} />
+        <Route path="/" element={<Login />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
 
         {/* Admin Dashboard Routes */}
@@ -27,11 +27,11 @@ function App() {
           <RouteRenderer routes={ADMIN_ROUTES} basePath="/dashboard/admin" />
         </Route>
 
-        {/* Client Dashboard Routes */}
+        {/* Client Dashboard Routes - No permission filtering */}
         <Route
           path="/dashboard/client"
           element={
-            <ProtectedRoute requiredPermission={CLIENT_PERMISSIONS.DASHBOARD}>
+            <ProtectedRoute requiredPermission={CLIENT_PERMISSIONS.ACCESS}>
               <ClientLayout />
             </ProtectedRoute>
           }

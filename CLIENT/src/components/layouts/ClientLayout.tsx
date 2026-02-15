@@ -1,20 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../redux/hooks";
-import {
-  filterRoutesByPermissions,
-  CLIENT_ROUTES,
-} from "../../constants/routeConfig";
+import { CLIENT_ROUTES } from "../../constants/routeConfig";
 import Sidebar from "../Sidebar";
 
 const ClientLayout: React.FC = () => {
   const navigate = useNavigate();
-  const { permissions } = useAppSelector((state) => state.permissions);
-  const [sidebarWidth, setSidebarWidth] = useState(240);
 
-  const allowedRoutes = filterRoutesByPermissions(CLIENT_ROUTES, permissions);
+  // Client routes - no permission filtering, show all routes
+  const allowedRoutes = CLIENT_ROUTES;
 
-  const handleNavigate = async (path: string, permission: string) => {
+  const handleNavigate = async (path: string) => {
     navigate(path);
   };
 
@@ -24,9 +19,7 @@ const ClientLayout: React.FC = () => {
       <main
         style={{
           flex: 1,
-          marginLeft: sidebarWidth === 60 ? "60px" : "240px",
           padding: "24px",
-          transition: "margin-left 0.3s ease",
         }}
       >
         <Outlet />

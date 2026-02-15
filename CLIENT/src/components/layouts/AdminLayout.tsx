@@ -10,11 +10,11 @@ import Sidebar from "../Sidebar";
 const AdminLayout: React.FC = () => {
   const navigate = useNavigate();
   const { permissions } = useAppSelector((state) => state.permissions);
-  const [sidebarWidth, setSidebarWidth] = useState(240);
+  const [sidebarWidth, _] = useState(240);
 
   const allowedRoutes = filterRoutesByPermissions(ADMIN_ROUTES, permissions);
 
-  const handleNavigate = async (path: string, permission: string) => {
+  const handleNavigate = async (path: string, _: string) => {
     navigate(path);
   };
 
