@@ -3,20 +3,15 @@ import { Route } from "react-router-dom";
 import ProtectedRoute from "../components/ProtectedRoute";
 import type { RouteConfig } from "../constants/routeConfig";
 
-interface RouteRendererProps {
-  routes: RouteConfig[];
-  basePath: string;
-}
-
 /**
- * Dynamically renders routes from configuration
+ * Render routes as an array of <Route> elements. Call this function
+ * inside a <Routes> or as children of a parent <Route> so the router
+ * receives actual <Route> elements (not a custom component).
  */
-export const RouteRenderer: React.FC<RouteRendererProps> = ({ routes, basePath }) => {
+export const RouteRenderer = (routes: RouteConfig[], basePath: string): React.ReactNode => {
   const renderRoute = (route: RouteConfig) => {
-    // Calculate relative path
     const relativePath = route.path.replace(basePath, "").replace(/^\//, "");
 
-    // If route has a component, render it
     if (route.component) {
       const Component = route.component;
       return (
@@ -39,12 +34,9 @@ export const RouteRenderer: React.FC<RouteRendererProps> = ({ routes, basePath }
     const elements: React.ReactNode[] = [];
 
     routeList.forEach((route) => {
-      // Render the route itself if it has a component
       if (route.component) {
         elements.push(renderRoute(route));
       }
-
-      // Render children recursively
       if (route.children) {
         elements.push(...renderRoutes(route.children));
       }

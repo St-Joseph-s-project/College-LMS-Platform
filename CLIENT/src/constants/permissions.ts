@@ -3,13 +3,15 @@
  */
 
 export const ADMIN_PERMISSIONS = {
-  DASHBOARD: "admin.dashboard.view",
+  DASHBOARD: "LMS_DASHBOARD_VIEW",
   REWARDS: {
-    VIEW: "admin.rewards.view",
-    CREATE: "admin.rewards.create",
-    TRACK: "admin.rewards.track",
-    HISTORY: "admin.rewards.history",
-  },
+    VIEW: "LMS_REWARDS_VIEW",
+    CREATE: "LMS_REWARDS_ADD",
+    TRACK: "LMS_REWARDS_TRACK",
+    HISTORY: "LMS_REWARDS_HISTORY",
+    DELETE: "LMS_REWARDS_DELETE",
+    UPDATE: "LMS_REWARDS_UPDATE"
+  }
 } as const;
 
 // Client permissions - simplified as client routes don't use permission-based filtering

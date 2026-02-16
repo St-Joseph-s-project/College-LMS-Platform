@@ -53,7 +53,7 @@ const handleLogin = async (credentials) => {
   }));
   
   // 3. Navigate to dashboard
-  navigate(response.role === 'admin' ? '/dashboard/admin' : '/dashboard/client');
+  navigate(response.role === 'admin' ? '/dashboard/admin' : '/dashboard/student');
 };
 ```
 
@@ -378,7 +378,7 @@ Update Sidebar to render React components:
                          ↓
 ┌─────────────────────────────────────────────────────────────┐
 │  Navigate to Dashboard                                      │
-│  /dashboard/admin or /dashboard/client                      │
+│  /dashboard/admin or /dashboard/student                      │
 └────────────────────────┬────────────────────────────────────┘
                          ↓
 ┌─────────────────────────────────────────────────────────────┐
