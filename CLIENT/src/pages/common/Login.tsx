@@ -5,6 +5,7 @@ import { useAppDispatch } from "../../redux/hooks";
 import { setJWTToken } from "../../redux/features/jwtSlice";
 import { setPermissions } from "../../redux/features/permissionsSlice";
 import logo from "../../assets/logo1.png";
+import { ThemeChanger } from "../../components";
 
 type loginResponseType = {
   message: String,
@@ -53,7 +54,6 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-[var(--background)] relative overflow-hidden">
-
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[var(--primary-alpha)] rounded-full blur-3xl opacity-20 animate-[float_8s_ease-in-out_infinite]"></div>
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[var(--primary-alpha)] rounded-full blur-3xl opacity-20 animate-[float_6s_ease-in-out_infinite_reverse]"></div>

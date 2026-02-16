@@ -51,7 +51,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // Verify permission with backend (runs only once per mount)
   useEffect(() => {
     if (requiredPermission && requiredPermission !== "client.access") {
-      getApi({ url: `/permission/has-permission/${requiredPermission}` })
+      getApi({ url: `/permission/has-permission/${requiredPermission}`, showLoader: false, showToaster: false })
         .then((response) => {
           console.log("Permission verified:", response);
         })
