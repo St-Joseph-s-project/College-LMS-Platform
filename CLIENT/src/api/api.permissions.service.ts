@@ -1,4 +1,4 @@
-import { getApi  } from "../api/api.sharing.serivce";
+import { getApi } from "./apiservice";
 
 /**
  * API service for permission checks
@@ -7,7 +7,7 @@ export const checkPermissionAPI = async (
   permission: string
 ): Promise<{ hasAccess: boolean }> => {
   try {
-    const response = await getApi({url: `/api/admin/permissions/check/${permission}`});
+    const response = await getApi({ url: `/api/admin/permissions/check/${permission}` });
     return response.data;
   } catch (error) {
     console.error("Permission check failed:", error);
@@ -23,7 +23,7 @@ export const fetchUserPermissions = async (): Promise<{
   role: "admin" | "client";
 }> => {
   try {
-    const response = await getApi({url: `/api/admin/permissions/get-permission`});;
+    const response = await getApi({ url: `/api/admin/permissions/get-permission` });;
     return response.data;
   } catch (error) {
     console.error("Failed to fetch permissions:", error);

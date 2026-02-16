@@ -3,14 +3,14 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 
 interface PermissionsState {
-  permissions: String[];
-  role: String;
+  permissions: string[];
+  role: string;
   isLoaded: boolean;
 }
 
 interface SetPermissionsPayload {
-  permissions: String[];
-  role: String;
+  permissions: string[];
+  role: string;
 }
 
 const initialState: PermissionsState = {
