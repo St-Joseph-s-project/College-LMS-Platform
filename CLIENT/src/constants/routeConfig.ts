@@ -1,9 +1,19 @@
+<<<<<<< HEAD
 import { createElement, type ComponentType, type ReactNode } from "react";
 import {
   LayoutDashboard,
   Gift,
   Plus,
   TrendingUp,
+=======
+import React from "react";
+import type { ComponentType, ReactNode } from "react";
+import { 
+  LayoutDashboard, 
+  Gift, 
+  Plus, 
+  TrendingUp, 
+>>>>>>> main
   History,
   ShoppingBag,
   BarChart3
@@ -39,34 +49,54 @@ export const ADMIN_ROUTE_MAP: Record<string, RouteConfig> = {
     path: "/dashboard/admin",
     permission: ADMIN_PERMISSIONS.DASHBOARD,
     label: "Dashboard",
+<<<<<<< HEAD
     icon: createElement(LayoutDashboard, { size: 18 }),
+=======
+    icon: React.createElement(LayoutDashboard, { size: 18 }),
+>>>>>>> main
     component: AdminDashboard,
   },
   REWARDS: {
     path: "/dashboard/admin/rewards",
     permission: ADMIN_PERMISSIONS.REWARDS.VIEW,
     label: "Rewards",
+<<<<<<< HEAD
     icon: createElement(Gift, { size: 18 }),
+=======
+    icon: React.createElement(Gift, { size: 18 }),
+>>>>>>> main
     children: [
       {
         path: "/dashboard/admin/rewards/create",
         permission: ADMIN_PERMISSIONS.REWARDS.CREATE,
         label: "Create Reward",
+<<<<<<< HEAD
         icon: createElement(Plus, { size: 18 }),
+=======
+        icon: React.createElement(Plus, { size: 18 }),
+>>>>>>> main
         component: CreateReward,
       },
       {
         path: "/dashboard/admin/rewards/track",
         permission: ADMIN_PERMISSIONS.REWARDS.TRACK,
         label: "Track Reward",
+<<<<<<< HEAD
         icon: createElement(TrendingUp, { size: 18 }),
+=======
+        icon: React.createElement(TrendingUp, { size: 18 }),
+>>>>>>> main
         component: TrackReward,
       },
       {
         path: "/dashboard/admin/rewards/history",
         permission: ADMIN_PERMISSIONS.REWARDS.HISTORY,
         label: "History Reward",
+<<<<<<< HEAD
         icon: createElement(History, { size: 18 }),
+=======
+        icon: React.createElement(History, { size: 18 }),
+>>>>>>> main
         component: HistoryReward,
       },
     ],
@@ -78,30 +108,46 @@ export const ADMIN_ROUTE_MAP: Record<string, RouteConfig> = {
  */
 export const CLIENT_ROUTE_MAP: Record<string, RouteConfig> = {
   DASHBOARD: {
-    path: "/dashboard/client",
+    path: "/dashboard/student",
     permission: "client.access", // Generic permission - not used for filtering
     label: "Dashboard",
+<<<<<<< HEAD
     icon: createElement(LayoutDashboard, { size: 18 }),
+=======
+    icon: React.createElement(LayoutDashboard, { size: 18 }),
+>>>>>>> main
     component: ClientDashboard,
   },
   REWARDS: {
-    path: "/dashboard/client/rewards",
+    path: "/dashboard/student/rewards",
     permission: "client.access", // Generic permission - not used for filtering
     label: "Rewards",
+<<<<<<< HEAD
     icon: createElement(Gift, { size: 18 }),
+=======
+    icon: React.createElement(Gift, { size: 18 }),
+>>>>>>> main
     children: [
       {
-        path: "/dashboard/client/rewards/store",
+        path: "/dashboard/student/rewards/store",
         permission: "client.access", // Generic permission - not used for filtering
         label: "Store",
+<<<<<<< HEAD
         icon: createElement(ShoppingBag, { size: 18 }),
+=======
+        icon: React.createElement(ShoppingBag, { size: 18 }),
+>>>>>>> main
         component: RewardStore,
       },
       {
-        path: "/dashboard/client/rewards/track",
+        path: "/dashboard/student/rewards/track",
         permission: "client.access", // Generic permission - not used for filtering
         label: "Track",
+<<<<<<< HEAD
         icon: createElement(BarChart3, { size: 18 }),
+=======
+        icon: React.createElement(BarChart3, { size: 18 }),
+>>>>>>> main
         component: RewardTrack,
       },
     ],

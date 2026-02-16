@@ -1,22 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-export type UserRole = "admin" | "client" | null;
 
 interface PermissionsState {
-  permissions: string[];
-  role: UserRole;
+  permissions: String[];
+  role: String;
   isLoaded: boolean;
 }
 
 interface SetPermissionsPayload {
-  permissions: string[];
-  role: UserRole;
+  permissions: String[];
+  role: String;
 }
 
 const initialState: PermissionsState = {
   permissions: [],
-  role: null,
+  role: "",
   isLoaded: false,
 };
 
@@ -31,7 +30,7 @@ const permissionsSlice = createSlice({
     },
     clearPermissions: (state: PermissionsState) => {
       state.permissions = [];
-      state.role = null;
+      state.role = "";
       state.isLoaded = false;
     },
     addPermission: (state: PermissionsState, action: PayloadAction<string>) => {

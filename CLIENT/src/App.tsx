@@ -31,19 +31,28 @@ function App() {
             </ProtectedRoute>
           }
         >
+<<<<<<< HEAD
           {RouteRenderer({ routes: ADMIN_ROUTES, basePath: "/dashboard/admin" })}
+=======
+          {RouteRenderer(ADMIN_ROUTES, "/dashboard/admin")}
+>>>>>>> main
         </Route>
 
-        {/* Client Dashboard Routes - No permission filtering */}
+
+        {/* Client Dashboard Routes - authenticated users only (no permission filter) */}
         <Route
-          path="/dashboard/client"
+          path="/dashboard/student"
           element={
-            <ProtectedRoute requiredPermission={CLIENT_PERMISSIONS.ACCESS}>
+            <ProtectedRoute>
               <ClientLayout />
             </ProtectedRoute>
           }
         >
+<<<<<<< HEAD
           {RouteRenderer({ routes: CLIENT_ROUTES, basePath: "/dashboard/client" })}
+=======
+          {RouteRenderer(CLIENT_ROUTES, "/dashboard/student")}
+>>>>>>> main
         </Route>
 
         {/* 404 Page */}

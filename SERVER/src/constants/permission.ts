@@ -1,0 +1,9 @@
+export const permissions: String[] = [
+  "LMS_DASHBOARD_VIEW",
+  "LMS_REWARDS_VIEW",
+  "LMS_REWARDS_ADD",
+  "LMS_REWARDS_TRACK", 
+  "LMS_REWARDS_HISTORY",
+  "LMS_REWARDS_DELETE",
+  "LMS_REWARDS_UPDATE"
+]
