@@ -11,6 +11,7 @@ import { Loader } from "./components";
 
 function App() {
   const isLoading: boolean = useAppSelector((s: any) => s.loading.isLoading);
+
   return (
     <BrowserRouter>
       {isLoading && (
@@ -30,7 +31,7 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <RouteRenderer routes={ADMIN_ROUTES} basePath="/dashboard/admin" />
+          {RouteRenderer({ routes: ADMIN_ROUTES, basePath: "/dashboard/admin" })}
         </Route>
 
         {/* Client Dashboard Routes - No permission filtering */}
@@ -42,7 +43,7 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <RouteRenderer routes={CLIENT_ROUTES} basePath="/dashboard/client" />
+          {RouteRenderer({ routes: CLIENT_ROUTES, basePath: "/dashboard/client" })}
         </Route>
 
         {/* 404 Page */}

@@ -1,9 +1,9 @@
-import type { ComponentType, ReactNode } from "react";
-import { 
-  LayoutDashboard, 
-  Gift, 
-  Plus, 
-  TrendingUp, 
+import { createElement, type ComponentType, type ReactNode } from "react";
+import {
+  LayoutDashboard,
+  Gift,
+  Plus,
+  TrendingUp,
   History,
   ShoppingBag,
   BarChart3
@@ -39,34 +39,34 @@ export const ADMIN_ROUTE_MAP: Record<string, RouteConfig> = {
     path: "/dashboard/admin",
     permission: ADMIN_PERMISSIONS.DASHBOARD,
     label: "Dashboard",
-    icon: LayoutDashboard({ size: 18 }),
+    icon: createElement(LayoutDashboard, { size: 18 }),
     component: AdminDashboard,
   },
   REWARDS: {
     path: "/dashboard/admin/rewards",
     permission: ADMIN_PERMISSIONS.REWARDS.VIEW,
     label: "Rewards",
-    icon: Gift({ size: 18 }),
+    icon: createElement(Gift, { size: 18 }),
     children: [
       {
         path: "/dashboard/admin/rewards/create",
         permission: ADMIN_PERMISSIONS.REWARDS.CREATE,
         label: "Create Reward",
-        icon: Plus({ size: 18 }),
+        icon: createElement(Plus, { size: 18 }),
         component: CreateReward,
       },
       {
         path: "/dashboard/admin/rewards/track",
         permission: ADMIN_PERMISSIONS.REWARDS.TRACK,
         label: "Track Reward",
-        icon: TrendingUp({ size: 18 }),
+        icon: createElement(TrendingUp, { size: 18 }),
         component: TrackReward,
       },
       {
         path: "/dashboard/admin/rewards/history",
         permission: ADMIN_PERMISSIONS.REWARDS.HISTORY,
         label: "History Reward",
-        icon: History({ size: 18 }),
+        icon: createElement(History, { size: 18 }),
         component: HistoryReward,
       },
     ],
@@ -81,27 +81,27 @@ export const CLIENT_ROUTE_MAP: Record<string, RouteConfig> = {
     path: "/dashboard/client",
     permission: "client.access", // Generic permission - not used for filtering
     label: "Dashboard",
-    icon: LayoutDashboard({ size: 18 }),
+    icon: createElement(LayoutDashboard, { size: 18 }),
     component: ClientDashboard,
   },
   REWARDS: {
     path: "/dashboard/client/rewards",
     permission: "client.access", // Generic permission - not used for filtering
     label: "Rewards",
-    icon: Gift({ size: 18 }),
+    icon: createElement(Gift, { size: 18 }),
     children: [
       {
         path: "/dashboard/client/rewards/store",
         permission: "client.access", // Generic permission - not used for filtering
         label: "Store",
-        icon: ShoppingBag({ size: 18 }),
+        icon: createElement(ShoppingBag, { size: 18 }),
         component: RewardStore,
       },
       {
         path: "/dashboard/client/rewards/track",
         permission: "client.access", // Generic permission - not used for filtering
         label: "Track",
-        icon: BarChart3({ size: 18 }),
+        icon: createElement(BarChart3, { size: 18 }),
         component: RewardTrack,
       },
     ],
@@ -166,7 +166,7 @@ export const getRouteByPath = (
  */
 export const flattenRoutes = (routes: RouteConfig[]): RouteConfig[] => {
   const flattened: RouteConfig[] = [];
-  
+
   routes.forEach((route) => {
     if (route.component) {
       flattened.push(route);
@@ -175,7 +175,7 @@ export const flattenRoutes = (routes: RouteConfig[]): RouteConfig[] => {
       flattened.push(...flattenRoutes(route.children));
     }
   });
-  
+
   return flattened;
 };
 
