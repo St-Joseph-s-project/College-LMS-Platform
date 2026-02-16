@@ -1,0 +1,22 @@
+// Admin Database Schema
+// Manages all tenant colleges
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/@prisma/admin-client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("ADMIN_DATABASE_URL")
+}
+
+model tenants {
+  id          Int      @id @default(autoincrement())
+  college_name String   @db.VarChar(255)
+  uniq_string  String   @unique @db.VarChar(100)
+  db_string    String   @db.VarChar(500)
+  is_active    Boolean @default(true)
+  
+  @@index([uniq_string])
+  @@index([is_active])
+}
