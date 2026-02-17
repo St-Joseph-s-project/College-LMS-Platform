@@ -33,7 +33,7 @@ const processQueue = (error: any, token: string | null = null) => {
       reject(new Error('No token available'));
     }
   });
-  
+
   // Clear the queue after processing
   failedQueue = [];
 };
@@ -67,28 +67,21 @@ instance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-       
         const refreshResponse = await refreshInstance.get(
           "/auth/check-refresh-token"
         );
 
-        
-        
         // Extract the token from response data using various possible formats
         let newAccessToken = null;
-        let userId = null;
-        
+
         if (refreshResponse.data) {
           // Try different possible response formats
           if (refreshResponse.data.accessToken) {
             newAccessToken = refreshResponse.data.accessToken;
-            userId = refreshResponse.data.userId || null;
           } else if (refreshResponse.data.token) {
             newAccessToken = refreshResponse.data.token;
-            userId = refreshResponse.data.userId || refreshResponse.data.user_id || null;
           } else if (refreshResponse.data.data && refreshResponse.data.data.accessToken) {
             newAccessToken = refreshResponse.data.data.accessToken;
-            userId = refreshResponse.data.data.userId || null;
           } else if (typeof refreshResponse.data === 'string') {
             // In case the token is returned directly as a string
             newAccessToken = refreshResponse.data;
@@ -96,14 +89,11 @@ instance.interceptors.response.use(
         }
 
         if (newAccessToken) {
-          
-          
           sessionStorage.setItem(JWT_TOKEN_NAME, newAccessToken);
 
           store.dispatch(
             setJWTToken({
               jwtToken: newAccessToken,
-              userId: userId,
             })
           );
 
@@ -117,7 +107,6 @@ instance.interceptors.response.use(
           throw new Error(`Invalid refresh response format: ${JSON.stringify(refreshResponse.data)}`);
         }
       } catch (refreshError: any) {
-        
         // Clear authentication data
         sessionStorage.removeItem(JWT_TOKEN_NAME);
         store.dispatch(clearJWTToken());
@@ -126,12 +115,11 @@ instance.interceptors.response.use(
         isRefreshing = false;
 
         // Provide more context in the error
-        const errorMessage = refreshError.response?.data?.message || 
-                             refreshError.message || 
-                             "Failed to refresh authentication token";
-                             
+        const errorMessage = refreshError.response?.data?.message ||
+          refreshError.message ||
+          "Failed to refresh authentication token";
+
         return Promise.reject(new Error(errorMessage));
-        
       }
     }
 
