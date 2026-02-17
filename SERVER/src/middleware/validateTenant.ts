@@ -70,7 +70,6 @@ export async function validateTenant(
       db_string: tenant.db_string,
     };
     req.tenantPrisma = tenantPrisma;
-
     next();
   } catch (error) {
     logger.error('Tenant validation error:', error);

@@ -293,6 +293,7 @@ model users {
   github_id        String?          @db.VarChar
   github_username  String?          @db.VarChar
   user_purchases   user_purchases[]
+  users_rewards    users_rewards[]
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -325,6 +326,31 @@ model user_purchases {
   status       String?     @default("COMPLETED") @db.VarChar(50)
   store_items  store_items @relation(fields: [item_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   users        users       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model rewards {
+  id            Int             @id @default(autoincrement())
+  title         String
+  description   String
+  coins         Int
+  image_url     String
+  image_key     String
+  created_at    DateTime?       @default(now()) @db.Timestamp(6)
+  updated_at    DateTime?       @default(now()) @db.Timestamp(6)
+  is_deleted    Boolean?        @default(false)
+  users_rewards users_rewards[]
+}
+
+model users_rewards {
+  id             Int                 @id @default(autoincrement())
+  user_id        Int
+  reward_id      Int
+  status         reward_status_enum? @default(PENDING)
+  ordered_date   DateTime?           @default(now()) @db.Timestamp(6)
+  delivered_date DateTime?           @db.Timestamp(6)
+  rewards        rewards             @relation(fields: [reward_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_reward")
+  users          users               @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_user")
 }
 
 enum difficulty_enum {
@@ -365,4 +391,11 @@ enum mcq_question_type_enum {
 enum login_status_enum {
   SUCCESS
   FAILURE
+}
+
+enum reward_status_enum {
+  PENDING
+  APPROVED
+  REJECTED
+  DELIVERED
 }

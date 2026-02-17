@@ -1,4 +1,4 @@
-export const permissions: String[] = [
+export const permissions: string[] = [
   "LMS_DASHBOARD_VIEW",
   "LMS_REWARDS_VIEW",
   "LMS_REWARDS_ADD",

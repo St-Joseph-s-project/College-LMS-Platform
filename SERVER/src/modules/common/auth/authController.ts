@@ -1,4 +1,4 @@
-import { Request, Response as ExpressResponse } from 'express';
+import type { Request, Response as ExpressResponse } from 'express';
 import { Response } from '../../../utils';
 import { STATUS_CODE } from '../../../constants/appConstants';
 import { CustomError } from '../../../utils/CustomError';
