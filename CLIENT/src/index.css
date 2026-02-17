@@ -1,6 +1,7 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
-*{
+* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -21,6 +22,7 @@ html {
   --surface-color: #ffffff;
   --text-primary: #1f2937;
   --text-secondary: #6b7280;
+  --text-placeholder: #9ca3af;
   --accent: #2563eb;
   --accent-hover: #1e40af;
   --border-color: #e5e7eb;
@@ -29,7 +31,7 @@ html {
   --error: #dc2626;
   --bg-muted: #f0f2f5;
   --bg-code: #f3f4f6;
-  
+
   /* Dashboard specific variables */
   --background: #f5f7fa;
   --primary: #2563eb;
@@ -37,6 +39,20 @@ html {
   --glass-bg: rgba(255, 255, 255, 0.7);
   --glass-border: rgba(0, 0, 0, 0.1);
   --glass-hover: rgba(37, 99, 235, 0.05);
+
+  /* PixelPrep Theme Variables */
+  --input-bg: #e5e7eb;
+  --input-text: #1f2937;
+  --card-glass: rgba(255, 255, 255, 0.7);
+  --card-border: rgba(255, 255, 255, 0.5);
+
+  /* Particle Colors (Light) */
+  --particle-1: 37, 99, 235;
+  /* Blue */
+  --particle-2: 219, 39, 119;
+  /* Pink */
+  --particle-3: 5, 150, 105;
+  /* Emerald */
 }
 
 [data-theme="dark"] {
@@ -44,6 +60,7 @@ html {
   --surface-color: #1a1c23;
   --text-primary: #e4e6eb;
   --text-secondary: #a6adba;
+  --text-placeholder: #6b7280;
   --accent: #4c8fff;
   --accent-hover: #1e66ff;
   --border-color: #2c2f36;
@@ -52,7 +69,7 @@ html {
   --error: #ef4444;
   --bg-muted: #181b21;
   --bg-code: #1e1f25;
-  
+
   /* Dashboard specific dark theme variables */
   --background: #0f1117;
   --primary: #4c8fff;
@@ -60,6 +77,20 @@ html {
   --glass-bg: rgba(26, 28, 35, 0.7);
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-hover: rgba(76, 143, 255, 0.05);
+
+  /* PixelPrep Dark Theme Variables */
+  --input-bg: #1f2937;
+  --input-text: #f3f4f6;
+  --card-glass: rgba(15, 23, 42, 0.7);
+  --card-border: rgba(255, 255, 255, 0.1);
+
+  /* Particle Colors (Dark - Neon) */
+  --particle-1: 0, 255, 255;
+  /* Neon Cyan */
+  --particle-2: 255, 0, 255;
+  /* Neon Magenta */
+  --particle-3: 57, 255, 20;
+  /* Neon Green */
 }
 
 
@@ -99,24 +130,61 @@ html {
   --color-code: var(--bg-code);
 
   @keyframes fadeIn {
-    0% { opacity: 0; transform: translateY(10px); }
-    100% { opacity: 1; transform: translateY(0); }
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
+
   @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
+
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
   }
+
   @keyframes glow {
-    0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
-    50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8), 0 0 60px rgba(59, 130, 246, 0.4); }
+
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+    }
+
+    50% {
+      box-shadow: 0 0 40px rgba(59, 130, 246, 0.8), 0 0 60px rgba(59, 130, 246, 0.4);
+    }
   }
+
   @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+    0% {
+      background-position: -200% 0;
+    }
+
+    100% {
+      background-position: 200% 0;
+    }
   }
+
   @keyframes ringPulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
-    50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+    }
+
+    50% {
+      box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);
+    }
   }
 
   --animate-fadeIn: fadeIn 0.25s ease-in-out;
@@ -127,45 +195,56 @@ html {
 }
 
 
-/* Custom Utilites */
+
+/* Custom Utilities */
 @utility scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+
   &::-webkit-scrollbar {
     display: none;
   }
 }
 
-@utility custom-hilight {
-  background: linear-gradient(270deg, #2563eb, #1e40af, #2563eb, #4c8fff);
-  background-size: 400% 400%;
-  animation: gradient-move 3s ease-in-out infinite;
+@utility glass-card {
+  background: var(--card-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
 }
 
-@utility button-hilight {
-  background: linear-gradient(90deg, #2563eb 0%, #4c8fff 100%);
-  background-size: 200% 100%;
-  animation: button-gradient-move 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+@utility neon-text {
+  text-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent), 0 0 20px var(--accent);
 }
 
-@utility animate-spin-slow {
-  animation: spin-slow 1.2s cubic-bezier(0.4, 0, 0.2, 1) both;
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
-@keyframes gradient-move {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+@utility animate-float-slow {
+  animation: float 6s ease-in-out infinite;
 }
 
-@keyframes button-gradient-move {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent);
+  }
+
+  50% {
+    box-shadow: 0 0 20px var(--accent), 0 0 30px var(--accent);
+  }
 }
 
-@keyframes spin-slow {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+@utility animate-pulse-glow {
+  animation: pulse-glow 3s infinite;
 }
-

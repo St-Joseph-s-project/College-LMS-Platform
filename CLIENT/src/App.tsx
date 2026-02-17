@@ -3,7 +3,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminLayout from "./components/layouts/AdminLayout";
 import ClientLayout from "./components/layouts/ClientLayout";
 import { Page404, Unauthorized, Login } from "./pages";
-import { ADMIN_PERMISSIONS, CLIENT_PERMISSIONS } from "./constants/permissions";
+import { ADMIN_PERMISSIONS } from "./constants/permissions";
 import { ADMIN_ROUTES, CLIENT_ROUTES } from "./constants/routeConfig";
 import { RouteRenderer } from "./config/RouteRenderer";
 import { useAppSelector } from "./redux/hooks"
