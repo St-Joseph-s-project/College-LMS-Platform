@@ -29,12 +29,10 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const data: loginResponseType = await postApi({ url: "/api/auth/login", data: { email, password } });
-
+      const data: loginResponseType = await postApi({ url: "/auth/login", data: { email, password } });
       const token = data.data.token;
       const role = data.data.role;
       const permissions = data.data.permissions;
-
       dispatch(setJWTToken({ jwtToken: token }));
       dispatch(setPermissions({
         permissions: permissions,

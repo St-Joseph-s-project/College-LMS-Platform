@@ -1,12 +1,11 @@
+import "dotenv/config";
 import appRouter from "./src/app";
 import { logger, connectDB } from "./src/config/index";
-import {seedCredentials, seedPermissions}from "./src/config/dbSeeder"
-import dotenv from "dotenv";
+import { seedCredentials, seedPermissions } from "./src/config/dbSeeder"
 import cors from "cors";
 import helmet from "helmet";
 import express from "express"
 import morgan from "morgan"
-dotenv.config();
 
 const app = express()
 // Configure CORS to allow the frontend origin and send cookies/credentials.
@@ -21,7 +20,9 @@ app.use(
 
 // Add explicit preflight handling with same CORS options
 app.options('*', cors({ origin: CLIENT_ORIGIN, credentials: true }));
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: false,
+}));
 app.use(express.json());
 app.use(morgan("combined", {
   stream: {
@@ -29,8 +30,11 @@ app.use(morgan("combined", {
   }
 }));
 
+import path from "path";
+
 const PORT = process.env.PORT || 3000;
 
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.use("/api", appRouter)
 
 const startServer = async () => {
