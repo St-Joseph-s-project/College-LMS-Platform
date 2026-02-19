@@ -14,18 +14,13 @@ const Loader: React.FC<LoaderProps> = ({ isLoading }) => {
       {/* 1. Shared Background Animation */}
       <NeuralNetworkBackground />
 
-      {/* 2. Glassmorphism Loading Card */}
-      <div className="relative z-10 flex flex-col items-center justify-center px-12 py-28 rounded-3xl glass-card animate-fadeIn shadow-2xl backdrop-blur-2xl border border-[var(--card-border)] bg-[var(--card-glass)] max-w-[360px] w-full mx-4 gap-8">
+      {/* 2. Loader Content (No Card Background) */}
+      <div className="relative z-10 flex flex-col items-center justify-center px-12 py-28 rounded-3xl animate-fadeIn max-w-[360px] w-full mx-4 gap-8">
 
-        {/* Fun Animation: Pulsing Logo / Icon */}
+        {/* Fun Animation: Spinning Rings */}
         <div className="relative w-12 h-12 flex items-center justify-center">
           {/* Outer spinning ring */}
           <div className="absolute inset-0 border-4 border-transparent border-t-blue-500 border-r-pink-500 rounded-full animate-spin shadow-[0_0_8px_rgba(59,130,246,0.3)]"></div>
-
-          {/* Inner pulsing circle */}
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center animate-pulse shadow-lg box-border border-2 border-white/10">
-            <span className="text-xl drop-shadow-lg"></span>
-          </div>
         </div>
 
         {/* Typing Text Effect */}

@@ -18,7 +18,7 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   requiredPermission,
-  redirectTo = "/login",
+  redirectTo = "/",
 }) => {
   const { jwtToken } = useAppSelector((state) => state.jwtSlice);
   const { permissions, isLoaded } = useAppSelector((state) => state.permissions);
