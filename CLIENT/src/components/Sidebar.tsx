@@ -11,9 +11,10 @@ interface SidebarProps {
   onNavigate: (path: string, permission: string) => void;
   isCollapsed: boolean;
   onToggle: () => void;
+  className?: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ routes, onNavigate, isCollapsed, onToggle }) => {
+const Sidebar: React.FC<SidebarProps> = ({ routes, onNavigate, isCollapsed, onToggle, className = "" }) => {
   const [expandedMenus, setExpandedMenus] = useState<string[]>([]);
   const location = useLocation();
   const navigate = useNavigate();
@@ -59,6 +60,8 @@ const Sidebar: React.FC<SidebarProps> = ({ routes, onNavigate, isCollapsed, onTo
   const isParentActive = (path: string) => location.pathname.startsWith(path + "/") && location.pathname !== path;
 
   const renderMenuItem = (route: RouteConfig, level: number = 0) => {
+    if (route.showInSidebar === false) return null;
+
     const hasChildren = route.children && route.children.length > 0;
     const isExpanded = expandedMenus.includes(route.path) || isParentActive(route.path);
     const exactActive = isExactActive(route.path);
@@ -76,8 +79,8 @@ const Sidebar: React.FC<SidebarProps> = ({ routes, onNavigate, isCollapsed, onTo
             }
           }}
           className={`
-            flex items-center cursor-pointer transition-all duration-300 group rounded-2xl mx-8 mb-2
-            ${isCollapsed ? 'justify-center px-0 py-4' : 'justify-start px-6 py-3'}
+            flex items-center cursor-pointer transition-all duration-300 group rounded-2xl mb-2
+            ${isCollapsed ? 'mx-2 justify-center px-0 py-4' : 'mx-6 justify-start px-3 py-3'}
             ${exactActive
               ? 'bg-blue-600 dark:bg-blue-600/30 text-white shadow-[0_8px_20px_-6px_rgba(37,99,235,0.5)]'
               : parentActive
@@ -115,17 +118,16 @@ const Sidebar: React.FC<SidebarProps> = ({ routes, onNavigate, isCollapsed, onTo
     <div
       className={`
         ${isCollapsed ? 'w-20' : 'w-[260px]'}
-        fixed left-6 top-6 bottom-6 z-[1000]
-        bg-white/70 dark:bg-black/40 backdrop-blur-3xl 
-        border border-gray-200 dark:border-white/10 
-        rounded-[32px] transition-all duration-500 ease-in-out
-        flex flex-col shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] overflow-hidden
+        ${className.includes('static') ? '' : 'fixed left-6 top-6 bottom-6'} z-[1000]
+        glass-card rounded-[32px] transition-all duration-500 ease-in-out
+        flex flex-col overflow-hidden
+        ${className}
       `}
     >
       {/* Header / Brand */}
       <div
         className={`
-          h-20 border-b border-gray-100 dark:border-white/10
+          h-20 border-b border-[var(--card-border)]
           flex items-center px-4 relative
           justify-center
         `}
@@ -154,7 +156,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes, onNavigate, isCollapsed, onTo
       </nav>
 
       {/* Footer / User Actions */}
-      <div className="p-4 border-t border-gray-100 dark:border-white/10 bg-gray-50/50 dark:bg-white/5 flex flex-col gap-2 shadow-inner">
+      <div className="p-4 border-t border-[var(--card-border)] bg-gray-50/50 dark:bg-white/5 flex flex-col gap-2 shadow-inner">
         {/* Theme Toggle */}
         <div
           onClick={toggleTheme}

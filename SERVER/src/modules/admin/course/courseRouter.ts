@@ -7,6 +7,7 @@ import {
   updateCourseController,
   deleteCourseController,
   updateVisibilityController,
+  getCourseDropdownController,
 } from "./courseController";
 import { courseValidator } from "./courseValidator";
 
@@ -67,6 +68,14 @@ router.put(
   checkPermission("LMS_COURSE_UPDATE"),
   courseValidator.updateVisibility,
   updateVisibilityController
+);
+
+
+router.get("/get-all/dropdown", validateJWT,
+  validateTenant,
+  checkPermission("LMS_MODULE_ADD"),
+  courseValidator.getCourseDropdown,
+  getCourseDropdownController
 );
 
 export default router;

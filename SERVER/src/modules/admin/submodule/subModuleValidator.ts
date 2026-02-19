@@ -1,63 +1,55 @@
-import { body, query, validationResult } from "express-validator";
+import { body, validationResult } from "express-validator";
 import { Request, Response as ExpressResponse, NextFunction } from "express";
 import { Response } from "../../../utils";
 import { STATUS_CODE } from "../../../constants/appConstants";
 
-export const courseValidator = {
-  createCourse: [
-    body("name")
+export const subModuleValidator = {
+  createSubModule: [
+    body("title")
       .exists({ checkFalsy: true })
-      .withMessage("Name is required")
+      .withMessage("Title is required")
       .isString()
-      .withMessage("Name must be a string"),
+      .withMessage("Title must be a string"),
 
     body("description")
       .optional()
       .isString()
       .withMessage("Description must be a string"),
 
-
+    body("type")
+      .exists({ checkFalsy: true })
+      .withMessage("Type is required")
+      .isIn(["TEST", "YT", "CONTENT"])
+      .withMessage("Type must be one of TEST, YT, CONTENT"),
 
     validator
   ],
 
-  updateCourse: [
-    body("name")
+  updateSubModule: [
+    body("title")
       .optional()
-      .notEmpty()
-      .withMessage("Name cannot be empty")
       .isString()
-      .withMessage("Name must be a string"),
+      .withMessage("Title must be a string"),
 
     body("description")
       .optional()
       .isString()
       .withMessage("Description must be a string"),
 
-    body("is_published")
+    body("type")
       .optional()
-      .isBoolean()
-      .withMessage("is_published must be a boolean"),
+      .isIn(["TEST", "YT", "CONTENT"])
+      .withMessage("Type must be one of TEST, YT, CONTENT"),
+
+    body("orderIndex")
+      .optional()
+      .isInt()
+      .withMessage("orderIndex must be an integer"),
 
     validator
   ],
 
-  updateVisibility: [
-    body("is_published")
-      .exists()
-      .withMessage("is_published is required")
-      .isBoolean()
-      .withMessage("is_published must be a boolean"),
-
-    validator
-  ],
-
-  getCourseDropdown: [
-    query("courseName")
-      .optional()
-      .isString()
-      .withMessage("courseName must be a string"),
-    
+  deleteSubModule: [
     validator
   ]
 };

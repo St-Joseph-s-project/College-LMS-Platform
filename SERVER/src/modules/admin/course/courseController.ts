@@ -6,6 +6,7 @@ import {
   updateCourseService,
   deleteCourseService,
   updateVisibilityService,
+  getCourseDropdownService,
 } from "./courseService";
 import { CustomError, Response } from "../../../utils";
 import { STATUS_CODE } from "../../../constants/appConstants";
@@ -134,6 +135,28 @@ export const updateVisibilityController = async (req: Request, res: ExpressRespo
     });
   } catch (err: any) {
     logger.error("Error in updateVisibilityController:", err);
+    return Response({
+      res,
+      data: null,
+      message: err.message,
+      statusCode: err instanceof CustomError ? err.statusCode : STATUS_CODE.INTERNAL_SERVER_ERROR,
+    });
+  }
+};
+
+export const getCourseDropdownController = async (req: Request, res: ExpressResponse) => {
+  try {
+    const { courseName } = req.query;
+    const courses = await getCourseDropdownService(req, courseName as string | undefined);
+
+    return Response({
+      res,
+      data: courses,
+      message: "Courses fetched successfully",
+      statusCode: STATUS_CODE.OK,
+    });
+  } catch (err: any) {
+    logger.error("Error in getCourseDropdownController:", err);
     return Response({
       res,
       data: null,

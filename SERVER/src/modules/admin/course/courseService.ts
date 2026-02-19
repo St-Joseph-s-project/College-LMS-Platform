@@ -112,3 +112,31 @@ export const updateVisibilityService = async (req: any, id: number, is_published
 
   return updatedCourse;
 };
+
+export const getCourseDropdownService = async (
+  req: any,
+  courseName: string | undefined
+) => {
+  const tenantPrisma = req.tenantPrisma;
+
+  const whereCondition: any = {};
+  if (courseName) {
+    whereCondition.name = {
+      contains: courseName,
+      mode: "insensitive",
+    };
+  }
+
+  const courses = await tenantPrisma.lms_course.findMany({
+    where: whereCondition,
+    select: {
+      id: true,
+      name: true,
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
+
+  return courses;
+};

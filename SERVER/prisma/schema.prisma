@@ -442,6 +442,7 @@ model lms_submodule {
 
   @@index([module_id], map: "idx_lms_submodule_module")
   @@index([is_test], map: "idx_lms_submodule_test")
+  @@index([module_id, order_index], map: "idx_lms_submodule_order")
 }
 
 model lms_submodule_question {
