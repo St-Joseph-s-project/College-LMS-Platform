@@ -12,7 +12,10 @@
     "watch": "tsc -w",
     "build": "tsc",
     "start": "node dist/server.js",
-    "prisma:generate": "prisma generate",
+    "postinstall": "npm run prisma:generate:all",
+    "prisma:generate": "prisma generate all",
+    "prisma:generate:admin": "prisma generate --schema=./prisma/admin.schema.prisma",
+    "prisma:generate:all": "npm run prisma:generate:admin && npm run prisma:generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
     "prisma:push": "prisma db push"

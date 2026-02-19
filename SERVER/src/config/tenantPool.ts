@@ -2,70 +2,54 @@
 import { PrismaClient as TenantPrismaClient } from '@prisma/tenant-client';
 import logger from './logger';
 
-interface PooledConnection {
+// Connection pool: key = db_string, value = TenantConnection
+interface TenantConnection {
   client: TenantPrismaClient;
   lastUsed: Date;
   college_id: number;
 }
 
-// Connection pool: key = db_string, value = pooled connections
-const connectionPool: Map<string, PooledConnection[]> = new Map();
+// We only want ONE PrismaClient per connection string to leverage Prisma's internal pooling.
+const connectionMap: Map<string, TenantConnection> = new Map();
 
 // Configuration
-const MAX_CONNECTIONS_PER_TENANT = 5;
 const CONNECTION_TTL_MS = 30 * 60 * 1000; // 30 minutes
 
 /**
  * Get a tenant Prisma client from the pool
- * Creates new connection if pool is not full
+ * Returns existing client or creates a new one if not exists
  */
 export function getTenantConnection(db_string: string, college_id: number): TenantPrismaClient {
-  // Get or create pool for this tenant
-  let pool = connectionPool.get(db_string);
-  
-  if (!pool) {
-    pool = [];
-    connectionPool.set(db_string, pool);
-  }
+  // Check if we already have a client for this connection string
+  let connection = connectionMap.get(db_string);
 
-  // Try to find an available connection
-  let connection = pool.find(conn => conn.lastUsed);
-  
   if (connection) {
     // Update last used time
     connection.lastUsed = new Date();
     return connection.client;
   }
 
-  // Create new connection if pool not full
-  if (pool.length < MAX_CONNECTIONS_PER_TENANT) {
-    const client = new TenantPrismaClient({
-      datasources: {
-        db: {
-          url: db_string,
-        },
+  // Create new client
+  const client = new TenantPrismaClient({
+    datasources: {
+      db: {
+        url: db_string,
       },
-      log: process.env.NODE_ENV === 'DEV' ? ['error'] : ['error'],
-    });
+    },
+    // Log queries in dev, error only in prod
+    log: process.env.NODE_ENV === 'DEV' ? ['error'] : ['error'],
+  });
 
-    const newConnection: PooledConnection = {
-      client,
-      lastUsed: new Date(),
-      college_id,
-    };
+  const newConnection: TenantConnection = {
+    client,
+    lastUsed: new Date(),
+    college_id,
+  };
 
-    pool.push(newConnection);
-    logger.info(`✅ Created connection for college ${college_id}. Pool size: ${pool.length}/${MAX_CONNECTIONS_PER_TENANT}`);
-    
-    return client;
-  }
+  connectionMap.set(db_string, newConnection);
+  logger.info(`✅ Created new Prisma Client for college ${college_id}. Active tenants: ${connectionMap.size}`);
 
-  // Pool is full, reuse least recently used
-  pool.sort((a, b) => a.lastUsed.getTime() - b.lastUsed.getTime());
-  const lruConnection = pool[0];
-  lruConnection.lastUsed = new Date();
-  
-  return lruConnection.client;
+  return client;
 }
 
 /**
@@ -73,26 +57,14 @@ export function getTenantConnection(db_string: string, college_id: number): Tena
  */
 function cleanupExpiredConnections(): void {
   const now = new Date();
-  
-  connectionPool.forEach((pool, db_string) => {
-    const validConnections = pool.filter(conn => {
-      const age = now.getTime() - conn.lastUsed.getTime();
-      
-      if (age > CONNECTION_TTL_MS) {
-        conn.client.$disconnect();
-        return false;
-      }
-      return true;
-    });
 
-    if (validConnections.length !== pool.length) {
-      logger.info(`🧹 Cleaned ${pool.length - validConnections.length} expired connections for tenant`);
-    }
+  connectionMap.forEach((conn, db_string) => {
+    const age = now.getTime() - conn.lastUsed.getTime();
 
-    if (validConnections.length > 0) {
-      connectionPool.set(db_string, validConnections);
-    } else {
-      connectionPool.delete(db_string);
+    if (age > CONNECTION_TTL_MS) {
+      logger.info(`cx Cleaning up expired connection for college ${conn.college_id}`);
+      conn.client.$disconnect().catch(err => logger.error('Error disconnecting client', err));
+      connectionMap.delete(db_string);
     }
   });
 }
@@ -102,12 +74,12 @@ function cleanupExpiredConnections(): void {
  */
 export function getPoolStats() {
   const stats: any[] = [];
-  
-  connectionPool.forEach((pool, db_string) => {
+
+  connectionMap.forEach((conn, db_string) => {
     stats.push({
+      collegeId: conn.college_id,
       db: db_string.replace(/:[^:@]+@/, ':****@'), // Hide password
-      connections: pool.length,
-      maxConnections: MAX_CONNECTIONS_PER_TENANT,
+      ageSeconds: (new Date().getTime() - conn.lastUsed.getTime()) / 1000,
     });
   });
 
@@ -120,14 +92,12 @@ export function getPoolStats() {
 export async function disconnectAllTenants(): Promise<void> {
   const disconnectPromises: Promise<void>[] = [];
 
-  connectionPool.forEach((pool) => {
-    pool.forEach(conn => {
-      disconnectPromises.push(conn.client.$disconnect());
-    });
+  connectionMap.forEach((conn) => {
+    disconnectPromises.push(conn.client.$disconnect());
   });
 
   await Promise.all(disconnectPromises);
-  connectionPool.clear();
+  connectionMap.clear();
   console.log('All tenant connections closed');
 }
 
