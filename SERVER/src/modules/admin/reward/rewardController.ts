@@ -3,10 +3,11 @@ import {
   createRewardService,
   getRewardsService,
   deleteRewardService,
-  getRewardByIdService
-} from "./adminService";
-import { CustomError, Response } from "../../utils";
-import { STATUS_CODE } from "../../constants/appConstants";
+  getRewardByIdService,
+  updateRewardService
+} from "./rewardService";
+import { CustomError, Response } from "../../../utils";
+import { STATUS_CODE } from "../../../constants/appConstants";
 
 
 
@@ -135,8 +136,7 @@ export const deleteRewardController = async (req: Request, res: ExpressResponse)
 
 
 
-// this is the code to update the rewards details 
-import { updateRewardService } from "./adminService";
+
 
 export const updateRewardController = async (
   req: Request,

@@ -1,9 +1,9 @@
 import { body, validationResult } from "express-validator";
 import { Request, Response as ExpressResponse, NextFunction } from "express";
-import { Response } from "../../utils";
-import { STATUS_CODE } from "../../constants/appConstants";
+import { Response } from "../../../utils";
+import { STATUS_CODE } from "../../../constants/appConstants";
 
-export const adminValidators = {
+export const rewardValidator = {
 
   createReward: [
     body("title")

@@ -18,6 +18,7 @@ import {
   ClientDashboard,
   RewardStore,
   RewardTrack,
+  CreateCourse,
 } from "../pages";
 
 /**
@@ -72,6 +73,21 @@ export const ADMIN_ROUTE_MAP: Record<string, RouteConfig> = {
       },
     ],
   },
+  COURSE: {
+    path: "/dashboard/admin/course",
+    permission: ADMIN_PERMISSIONS.COURSE.VIEW,
+    label: "Course",
+    icon: React.createElement(Gift, { size: 18 }),
+    children: [
+      {
+        path: "/dashboard/admin/couse/create",
+        permission: ADMIN_PERMISSIONS.COURSE.CREATE,
+        label: "Create Course",
+        icon: React.createElement(Plus, { size: 18 }),
+        component: CreateCourse,
+      }
+    ]
+  }
 };
 
 /**

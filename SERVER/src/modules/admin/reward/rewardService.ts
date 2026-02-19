@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
-import { STATUS_CODE } from "../../constants/appConstants";
-import { CustomError } from "../../utils";
+import { STATUS_CODE } from "../../../constants/appConstants";
+import { CustomError } from "../../../utils";
 
 // this is the Reward Creation Service code 
 export const createRewardService = async (req: any, data: any, file: any) => {
