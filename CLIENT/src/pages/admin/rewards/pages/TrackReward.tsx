@@ -46,7 +46,6 @@ const TrackReward = () => {
   });
 
   return (
-<<<<<<< HEAD
     <div className="min-h-screen bg-[var(--background)] w-full p-6 space-y-8 animate-fadeIn text-[var(--text-primary)]">
       {/* Header Section */}
       <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-6 glass-card p-8 rounded-xl border-gray-200/30 dark:border-white/5 shadow-lg">
@@ -191,11 +190,6 @@ const TrackReward = () => {
           )}
         </div>
       </div>
-=======
-    <div className="w-full space-y-8">
-      <h1 className="text-[length:var(--font-h1)] leading-[var(--font-h1--line-height)] font-black tracking-tight text-[var(--text-primary)]">Track Reward</h1>
-      <p className="text-[length:var(--font-body)] text-[var(--text-secondary)]">Track reward distribution and status</p>
->>>>>>> ashwin/lms_core
     </div>
   );
 };
