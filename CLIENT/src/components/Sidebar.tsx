@@ -76,7 +76,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes, onNavigate, isCollapsed, onTo
             }
           }}
           className={`
-            flex items-center cursor-pointer transition-all duration-300 group rounded-2xl mx-8 mb-2
+            flex items-center cursor-pointer transition-all duration-300 group rounded-xl mx-8 mb-2
             ${isCollapsed ? 'justify-center px-0 py-4' : 'justify-start px-6 py-3'}
             ${exactActive
               ? 'bg-blue-600 dark:bg-blue-600/30 text-white shadow-[0_8px_20px_-6px_rgba(37,99,235,0.5)]'
@@ -118,8 +118,8 @@ const Sidebar: React.FC<SidebarProps> = ({ routes, onNavigate, isCollapsed, onTo
         fixed left-6 top-6 bottom-6 z-[1000]
         bg-white/70 dark:bg-black/40 backdrop-blur-3xl 
         border border-gray-200 dark:border-white/10 
-        rounded-[32px] transition-all duration-500 ease-in-out
-        flex flex-col shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] overflow-hidden
+        rounded-2xl transition-all duration-500 ease-in-out
+        flex flex-col shadow-xl overflow-hidden
       `}
     >
       {/* Header / Brand */}
@@ -159,7 +159,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes, onNavigate, isCollapsed, onTo
         <div
           onClick={toggleTheme}
           className={`
-            flex items-center cursor-pointer p-4 rounded-2xl bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 transition-all duration-300 group mx-2
+            flex items-center cursor-pointer p-4 rounded-xl bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 transition-all duration-300 group mx-2
             ${isCollapsed ? 'justify-center' : 'justify-start'}
           `}
         >
@@ -181,7 +181,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes, onNavigate, isCollapsed, onTo
         <div
           onClick={handleLogout}
           className={`
-            flex items-center justify-center cursor-pointer p-3 rounded-2xl hover:bg-red-500/10 transition-all duration-300 group mx-1
+            flex items-center justify-center cursor-pointer p-3 rounded-xl hover:bg-red-500/10 transition-all duration-300 group mx-1
             text-gray-600 dark:text-white/60 hover:text-red-500
           `}
         >

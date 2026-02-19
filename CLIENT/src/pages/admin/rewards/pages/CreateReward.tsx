@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Plus, Trash2, Edit2, X, Upload, Search, Filter, Loader2 } from "lucide-react";
+import { useLocation } from "react-router-dom";
+import { Plus, Trash2, Edit2, X, Upload, Search, Filter, Loader2, Gift } from "lucide-react";
 import { getApi, postApi, putApi, deleteApi } from "../../../../api/apiservice";
 
 type Reward = {
@@ -29,6 +30,7 @@ const CreateReward = () => {
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const location = useLocation();
 
   const [formData, setFormData] = useState({
     title: "",
@@ -41,6 +43,12 @@ const CreateReward = () => {
   useEffect(() => {
     fetchRewards();
   }, []);
+
+  useEffect(() => {
+    if (location.pathname.endsWith("/create")) {
+      handleOpenModal();
+    }
+  }, [location.pathname]);
 
   const fetchRewards = async () => {
     setLoading(true);
@@ -151,84 +159,106 @@ const CreateReward = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[var(--background)] p-6 space-y-6">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-[var(--glass-bg)] backdrop-blur-md p-6 rounded-2xl border border-[var(--glass-border)] shadow-sm">
-        <div>
-          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[var(--accent)] to-[var(--accent-hover)]">
-            Reward Management
+    <div className="min-h-screen bg-[var(--background)] w-full p-6 space-y-8 animate-fadeIn text-[var(--text-primary)]">
+      {/* Header Section */}
+      <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-6 glass-card p-8 rounded-xl border-gray-200/30 dark:border-white/5 shadow-lg">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--text-primary)] dark:text-white">
+            Reward <span className="text-[var(--accent)]">Management</span>
           </h1>
-          <p className="text-[var(--text-secondary)] mt-1">Manage and organize student rewards</p>
+          <p className="text-[var(--text-secondary)] text-sm font-medium flex items-center gap-2 opacity-80">
+            <Gift size={16} className="text-[var(--accent)]" />
+            Curate and organize student redemption items
+          </p>
         </div>
         <button
           onClick={() => handleOpenModal()}
-          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-hover)] text-white rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300 font-medium"
+          className="flex items-center gap-2.5 px-6 py-3 bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white rounded-xl shadow-lg shadow-[var(--accent)]/20 transform hover:-translate-y-0.5 transition-all duration-300 font-bold text-sm group"
         >
-          <Plus size={20} />
+          <Plus size={18} className="group-hover:rotate-90 transition-transform duration-300" />
           Add New Reward
         </button>
       </div>
 
-      {/* Search and Filter Bar */}
-      <div className="bg-[var(--glass-bg)] backdrop-blur-md p-4 rounded-xl border border-[var(--glass-border)] flex gap-4 items-center">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]" size={20} />
+      {/* Control Bar */}
+      <div className="w-full flex flex-col md:flex-row gap-6 items-center">
+        <div className="relative flex-1 group w-full">
+          <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] group-focus-within:text-[var(--accent)] transition-colors duration-300">
+            <Search size={20} />
+          </div>
           <input
             type="text"
-            placeholder="Search rewards..."
+            placeholder="Search rewards by title or description..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-[var(--bg-muted)] rounded-lg border border-[var(--border-color)] outline-none focus:ring-2 focus:ring-[var(--accent)] transition-all text-[var(--text-primary)]"
+            className="w-full pl-14 pr-8 py-4 bg-white/20 dark:bg-black/10 backdrop-blur-xl rounded-xl border border-gray-200/50 dark:border-white/10 outline-none focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)] transition-all duration-300 text-base font-medium placeholder:text-gray-400 dark:placeholder:text-gray-600 shadow-sm"
           />
         </div>
-        <button className="p-2 text-[var(--text-secondary)] hover:bg-[var(--bg-muted)] rounded-lg transition-colors">
-          <Filter size={20} />
+
+        <button className="flex items-center gap-2 px-6 py-4 bg-white/20 dark:bg-black/10 backdrop-blur-xl rounded-xl border border-gray-200/50 dark:border-white/10 text-[var(--text-secondary)] hover:bg-[var(--accent)]/5 hover:text-[var(--accent)] transition-all duration-200 shadow-sm">
+          <Filter size={18} />
+          <span className="text-sm font-bold uppercase tracking-wider">Filter</span>
         </button>
       </div>
 
       {/* Rewards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-12">
         {loading ? (
-          <div className="col-span-full flex justify-center py-20">
+          <div className="col-span-full flex flex-col items-center justify-center py-32 space-y-4">
             <Loader2 className="animate-spin text-[var(--accent)]" size={40} />
+            <p className="text-[var(--text-secondary)] font-bold opacity-70 animate-pulse text-sm">Syncing with Reward Vault...</p>
           </div>
         ) : filteredRewards.length === 0 ? (
-          <div className="col-span-full text-center py-20 text-[var(--text-secondary)]">
-            {loading ? "Loading..." : "No rewards found. Create one to get started!"}
+          <div className="col-span-full glass-card rounded-xl py-24 text-center space-y-4 border-dashed border-2 border-gray-200 dark:border-white/5">
+            <div className="w-16 h-16 bg-gray-50/50 dark:bg-white/5 rounded-full flex items-center justify-center mx-auto mb-2 opacity-50">
+              <Gift size={28} className="text-gray-400" />
+            </div>
+            <h3 className="text-lg font-bold text-[var(--text-primary)]">No Rewards Found</h3>
+            <p className="text-[var(--text-secondary)] text-sm max-w-xs mx-auto font-medium opacity-70">Start by creating your first reward item for the student store.</p>
+            <button onClick={() => handleOpenModal()} className="text-[var(--accent)] font-bold hover:underline text-sm transition-all">Create One Now</button>
           </div>
         ) : (
           filteredRewards.map((reward) => (
-            <div key={reward.id} className="group bg-[var(--glass-bg)] backdrop-blur-md rounded-2xl border border-[var(--glass-border)] overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative">
+            <div
+              key={reward.id}
+              className="group glass-card rounded-xl border-none overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-1.5 flex flex-col relative"
+            >
               {/* Image Section */}
-              <div className="h-48 w-full overflow-hidden bg-[var(--bg-muted)] relative">
+              <div className="h-52 w-full overflow-hidden bg-gray-50/50 dark:bg-white/5 relative">
                 <img
                   src={getImageUrl(reward.image_url)}
                   alt={reward.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
-                <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-white text-xs font-bold border border-white/20">
-                  {reward.coins} Coins
+                {/* Cost Badge */}
+                <div className="absolute top-4 right-4 bg-white/20 dark:bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg text-white text-[10px] font-bold border border-white/20 shadow-lg group-hover:bg-[var(--accent)] transition-colors duration-300">
+                  <span className="flex items-center gap-1.5">
+                    {reward.coins} <span className="opacity-70 tracking-widest uppercase">Coins</span>
+                  </span>
                 </div>
               </div>
 
               {/* Content Section */}
-              <div className="p-5">
-                <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2 truncate" title={reward.title}>{reward.title}</h3>
-                <p className="text-[var(--text-secondary)] text-sm line-clamp-2 h-10 mb-4">
+              <div className="p-6 flex-1 flex flex-col">
+                <h3 className="text-lg font-bold text-[var(--text-primary)] dark:text-white mb-2 leading-tight group-hover:text-[var(--accent)] transition-colors duration-300 truncate">
+                  {reward.title}
+                </h3>
+                <p className="text-[var(--text-secondary)] text-xs leading-relaxed line-clamp-2 mb-6 font-medium opacity-80">
                   {reward.description}
                 </p>
 
                 {/* Actions */}
-                <div className="flex gap-2 mt-4 pt-4 border-t border-[var(--border-color)]">
+                <div className="mt-auto flex gap-2 pt-5 border-t border-gray-100 dark:border-white/5">
                   <button
                     onClick={() => handleOpenModal(reward)}
-                    className="flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg bg-[var(--bg-muted)] text-[var(--text-primary)] hover:bg-[var(--accent)] hover:text-white transition-all duration-200 text-sm font-medium"
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-gray-50/50 dark:bg-white/5 text-[var(--text-primary)] dark:text-white/80 hover:bg-[var(--accent)] hover:text-white transition-all duration-200 text-xs font-bold"
                   >
-                    <Edit2 size={16} />
-                    Edit
+                    <Edit2 size={14} />
+                    Edit Item
                   </button>
                   <button
                     onClick={() => handleDelete(reward.id)}
-                    className="flex items-center justify-center p-2 rounded-lg bg-red-50/10 text-red-400 hover:bg-red-500 hover:text-white transition-all duration-200"
+                    className="w-10 h-10 flex items-center justify-center rounded-lg bg-red-500/5 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-200"
                     title="Delete Reward"
                   >
                     <Trash2 size={16} />
@@ -240,79 +270,95 @@ const CreateReward = () => {
         )}
       </div>
 
-      {/* Create/Edit Modal */}
+      {/* Create/Edit Modal - Enhanced Glassmorphism */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-[var(--surface-color)] w-full max-w-lg rounded-2xl shadow-2xl border border-[var(--glass-border)] overflow-hidden animate-in zoom-in-95 duration-200" style={{ backgroundColor: 'var(--bg-color)' }}>
-            <div className="p-6 border-b border-[var(--border-color)] flex justify-between items-center bg-[var(--bg-muted)]">
-              <h2 className="text-xl font-bold text-[var(--text-primary)]">
-                {editingReward ? "Edit Reward" : "Create New Reward"}
-              </h2>
-              <button onClick={handleCloseModal} className="text-[var(--text-secondary)] hover:text-[var(--error)] transition-colors">
-                <X size={24} />
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 sm:p-6 md:p-8 animate-fadeIn">
+          <div className="absolute inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-md" onClick={handleCloseModal} />
+          <div className="relative w-full max-w-xl bg-white dark:bg-[#111] rounded-2xl shadow-2xl border border-gray-100 dark:border-white/5 overflow-hidden animate-in zoom-in-95 duration-300">
+            <div className="px-8 py-5 border-b border-gray-100 dark:border-white/5 flex justify-between items-center bg-gray-50/30 dark:bg-white/5">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]">
+                  {editingReward ? <Edit2 size={18} /> : <Plus size={18} />}
+                </div>
+                <h2 className="text-xl font-bold text-[var(--text-primary)] dark:text-white">
+                  {editingReward ? "Update Reward" : "New Reward Asset"}
+                </h2>
+              </div>
+              <button
+                onClick={handleCloseModal}
+                className="w-9 h-9 rounded-full flex items-center justify-center text-[var(--text-secondary)] hover:bg-red-500/10 hover:text-red-500 transition-all duration-200"
+              >
+                <X size={20} />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="p-6 space-y-5">
-              {/* Image Upload */}
+            <form onSubmit={handleSubmit} className="p-8 space-y-6">
+              {/* Image Upload Area */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-[var(--text-primary)]">Reward Image</label>
-                <div className="relative h-48 rounded-xl border-2 border-dashed border-[var(--border-color)] bg-[var(--bg-muted)] hover:border-[var(--accent)] transition-colors group cursor-pointer overflow-hidden flex flex-col items-center justify-center">
+                <label className="text-[10px] font-bold text-[var(--text-secondary)] px-1 uppercase tracking-widest opacity-60">Visual Assets</label>
+                <div className="relative h-48 rounded-xl border-2 border-dashed border-gray-100 dark:border-white/10 bg-gray-50/30 dark:bg-white/2 hover:border-[var(--accent)] transition-all duration-300 flex flex-col items-center justify-center overflow-hidden">
                   <input
                     type="file"
                     accept="image/*"
                     onChange={handleImageChange}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
                   />
                   {previewUrl ? (
-                    <img src={getImageUrl(previewUrl)} alt="Preview" className="w-full h-full object-cover" />
+                    <div className="relative w-full h-full group">
+                      <img src={getImageUrl(previewUrl)} alt="Preview" className="w-full h-full object-cover" />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <span className="text-white font-bold px-4 py-2 rounded-lg border border-white/30 bg-black/20 backdrop-blur-md text-xs">Change Asset</span>
+                      </div>
+                    </div>
                   ) : (
-                    <div className="flex flex-col items-center text-[var(--text-secondary)] group-hover:text-[var(--accent)] transition-colors">
-                      <Upload size={32} className="mb-2" />
-                      <span className="text-sm font-medium">Click to upload image</span>
+                    <div className="flex flex-col items-center space-y-3 text-gray-400 opacity-60">
+                      <Upload size={24} />
+                      <div className="text-center">
+                        <span className="block text-xs font-bold uppercase tracking-wider">Drag & Drop Image</span>
+                      </div>
                     </div>
                   )}
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">Title</label>
+              <div className="space-y-5">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-[var(--text-secondary)] px-1 uppercase tracking-widest opacity-60">Reward Title</label>
                   <input
                     type="text"
                     required
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-muted)] focus:ring-2 focus:ring-[var(--accent)] outline-none transition-all text-[var(--text-primary)]"
-                    placeholder="e.g. Premium Notebook"
+                    className="w-full px-5 py-3 rounded-xl bg-gray-50/50 dark:bg-white/5 border border-gray-100 dark:border-white/10 text-[var(--text-primary)] dark:text-white font-bold focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)] outline-none transition-all duration-200 text-base"
+                    placeholder="e.g. Premium Tech Bundle"
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">Coins Price</label>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-[var(--text-secondary)] px-1 uppercase tracking-widest opacity-60">Redemption Cost</label>
+                  <div className="relative">
                     <input
                       type="number"
                       required
                       min="1"
                       value={formData.coins}
                       onChange={(e) => setFormData({ ...formData, coins: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-muted)] focus:ring-2 focus:ring-[var(--accent)] outline-none transition-all text-[var(--text-primary)]"
-                      placeholder="e.g. 500"
+                      className="w-full pl-5 pr-16 py-3 rounded-xl bg-gray-50/50 dark:bg-white/5 border border-gray-100 dark:border-white/10 text-[var(--text-primary)] dark:text-white font-bold focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)] outline-none transition-all duration-200 text-base"
+                      placeholder="0"
                     />
+                    <span className="absolute right-5 top-1/2 -translate-y-1/2 font-bold text-[10px] text-amber-500 uppercase tracking-widest">Coins</span>
                   </div>
-                  {/* Placeholder for any other field if needed */}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">Description</label>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-[var(--text-secondary)] px-1 uppercase tracking-widest opacity-60">Reward Description</label>
                   <textarea
                     required
                     rows={3}
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-muted)] focus:ring-2 focus:ring-[var(--accent)] outline-none transition-all text-[var(--text-primary)] resize-none"
-                    placeholder="Enter reward description..."
+                    className="w-full px-5 py-3 rounded-xl bg-gray-50/50 dark:bg-white/5 border border-gray-100 dark:border-white/10 text-[var(--text-primary)] dark:text-white font-medium focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)] outline-none transition-all duration-200 resize-none text-sm leading-relaxed"
+                    placeholder="Provide a compelling description..."
                   />
                 </div>
               </div>
@@ -321,16 +367,23 @@ const CreateReward = () => {
                 <button
                   type="button"
                   onClick={handleCloseModal}
-                  className="flex-1 py-3 px-4 rounded-xl border border-[var(--border-color)] text-[var(--text-secondary)] hover:bg-[var(--bg-muted)] transition-all font-medium"
+                  className="flex-1 py-3 text-[var(--text-secondary)] text-xs font-bold hover:bg-gray-100 dark:hover:bg-white/5 rounded-lg transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-[var(--accent)] to-[var(--accent-hover)] text-white hover:shadow-lg hover:scale-[1.02] transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-[2] py-3 bg-[var(--accent)] text-white rounded-lg font-bold text-sm shadow-lg shadow-[var(--accent)]/20 hover:-translate-y-0.5 active:scale-[0.98] transition-all disabled:opacity-50"
                 >
-                  {submitting ? (editingReward ? "Updating..." : "Creating...") : (editingReward ? "Update Reward" : "Create Reward")}
+                  {submitting ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <Loader2 className="animate-spin" size={16} />
+                      Processing
+                    </span>
+                  ) : (
+                    <span>{editingReward ? "Save Changes" : "Create Reward Item"}</span>
+                  )}
                 </button>
               </div>
             </form>
