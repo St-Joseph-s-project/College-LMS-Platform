@@ -9,7 +9,9 @@ import {
   getRewardsController,
   deleteRewardController,
   getRewardByIdController,
-  updateRewardController
+  updateRewardController,
+  getPendingRewardsController,
+  getDeliveredRewardsController
 } from "./rewardController";
 
 
@@ -41,12 +43,54 @@ const router = express.Router();
 
 router.get("/get-all", validateJWT, validateTenant, checkPermission("LMS_REWARD_VIEW"), getRewardsController)
 
-router.get("/get/{id}", validateJWT, validateTenant, checkPermission("LMS_REWARD_VIEW"), getRewardByIdController)
+router.get("/get/:id", validateJWT, validateTenant, checkPermission("LMS_REWARD_VIEW"), getRewardByIdController)
 
-router.post("/add", validateJWT, validateTenant, checkPermission("LMS_REWARD_ADD"), rewardValidator.createReward, createRewardController)
+// router.post("/add", validateJWT, validateTenant, checkPermission("LMS_REWARD_ADD"), rewardValidator.createReward, createRewardController)
 
-router.put("/update/{id}", validateJWT, validateTenant, checkPermission("LMS_REWARD_UPDATE"), rewardValidator.updateReward, updateRewardController)
+// router.put("/update/:id", validateJWT, validateTenant, checkPermission("LMS_REWARD_UPDATE"), rewardValidator.updateReward, updateRewardController)
 
-router.put("/delete/{id}", validateJWT, validateTenant, checkPermission("LMS_REWARD_DELETE"), deleteRewardController)
+router.post(
+  "/add",
+  validateJWT,
+  validateTenant,
+  checkPermission("LMS_REWARD_ADD"),
+  upload.single("image"),  
+  rewardValidator.createReward,
+  createRewardController
+);
+
+router.put(
+  "/update/:id",
+  validateJWT,
+  validateTenant,
+  checkPermission("LMS_REWARD_UPDATE"),
+  upload.single("image"), 
+  rewardValidator.updateReward,
+  updateRewardController
+);
+
+
+
+
+
+//newly added routes
+router.get(
+  "/track-rewards",
+  validateJWT,
+  validateTenant,
+  checkPermission("LMS_REWARD_VIEW"),
+  getPendingRewardsController
+);
+
+router.get(
+  "/history-rewards",
+  validateJWT,
+  validateTenant,
+  checkPermission("LMS_REWARD_VIEW"),
+  getDeliveredRewardsController
+);
+
+
+router.delete("/delete/:id", validateJWT, validateTenant, checkPermission("LMS_REWARD_DELETE"), deleteRewardController)
 
 export default router;

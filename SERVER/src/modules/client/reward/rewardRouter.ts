@@ -5,34 +5,38 @@ import { getAllRewardsController, getRewardByIdController, buyRewardController, 
 const router = express.Router();
 
 router.get(
-  "/rewards/get-all",
+  "/get-all",
   validateJWT,
   validateTenant,
-  checkPermission("LMS_REWARDS_VIEW"),
+  checkPermission("LMS_REWARD_VIEW"),
   getAllRewardsController,
 );
 
 router.get(
-  "/rewards/history",
+  "/history",
   validateJWT,
   validateTenant,
   getClientRewardsHistoryController,
 );
 
 router.get(
-  "/rewards/:id",
+  "/get/:id",
   validateJWT,
   validateTenant,
-  checkPermission("LMS_REWARDS_VIEW"),
+  checkPermission("LMS_REWARD_VIEW"),
   getRewardByIdController,
 )
 
 router.post(
-  "/rewards/purchase/:id",
+  "/purchase/:id",
   validateJWT,
   validateTenant,
   buyRewardController,
 );
+
+
+
+
 
 router.use("/health", (req, res) => {
   res.json("CLIENT HEALTH OK");

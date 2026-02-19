@@ -353,30 +353,34 @@ model users_rewards {
 }
 
 model lms_course {
-  id                         Int                          @id @default(autoincrement())
-  name                       String                       @db.VarChar(100)
-  description                String?
-  is_published               Boolean?                     @default(false)
-  created_at                 DateTime?                    @default(now()) @db.Timestamp(6)
-  lms_module                 lms_module[]
-  lms_roadmap_course_mapping lms_roadmap_course_mapping[]
-  lms_user_course_view       lms_user_course_view[]
-  lms_user_module_view       lms_user_module_view[]
+  id                                                                       Int                          @id @default(autoincrement())
+  name                                                                     String                       @db.VarChar(100)
+  description                                                              String?
+  is_published                                                             Boolean?                     @default(false)
+  created_at                                                               DateTime?                    @default(now()) @db.Timestamp(6)
+  lms_course_dependency_lms_course_dependency_course_idTolms_course        lms_course_dependency[]      @relation("lms_course_dependency_course_idTolms_course")
+  lms_course_dependency_lms_course_dependency_parent_course_idTolms_course lms_course_dependency[]      @relation("lms_course_dependency_parent_course_idTolms_course")
+  lms_module                                                               lms_module[]
+  lms_roadmap_course_mapping                                               lms_roadmap_course_mapping[]
+  lms_user_course_view                                                     lms_user_course_view[]
+  lms_user_module_view                                                     lms_user_module_view[]
+  lms_user_submodule_view                                                  lms_user_submodule_view[]
 
   @@index([is_published], map: "idx_lms_course_published")
 }
 
 model lms_module {
-  id                   Int                    @id @default(autoincrement())
-  course_id            Int
-  order_index          Int
-  name                 String                 @db.VarChar(100)
-  description          String?
-  is_published         Boolean?               @default(false)
-  created_at           DateTime?              @default(now()) @db.Timestamp(6)
-  lms_course           lms_course             @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  lms_submodule        lms_submodule[]
-  lms_user_module_view lms_user_module_view[]
+  id                      Int                       @id @default(autoincrement())
+  course_id               Int
+  order_index             Int
+  name                    String                    @db.VarChar(100)
+  description             String?
+  is_published            Boolean?                  @default(false)
+  created_at              DateTime?                 @default(now()) @db.Timestamp(6)
+  lms_course              lms_course                @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lms_submodule           lms_submodule[]
+  lms_user_module_view    lms_user_module_view[]
+  lms_user_submodule_view lms_user_submodule_view[]
 
   @@index([course_id], map: "idx_lms_module_course")
   @@index([course_id, order_index], map: "idx_lms_module_order")
@@ -424,16 +428,17 @@ model lms_roadmap_course_mapping {
 }
 
 model lms_submodule {
-  id                     Int                      @id @default(autoincrement())
-  module_id              Int
-  name                   String                   @db.VarChar(100)
-  description            String?
-  video_url              String?
-  content                String?
-  is_test                Boolean?                 @default(false)
-  created_at             DateTime?                @default(now()) @db.Timestamp(6)
-  lms_module             lms_module               @relation(fields: [module_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  lms_submodule_question lms_submodule_question[]
+  id                      Int                       @id @default(autoincrement())
+  module_id               Int
+  name                    String                    @db.VarChar(100)
+  description             String?
+  video_url               String?
+  content                 String?
+  is_test                 Boolean?                  @default(false)
+  created_at              DateTime?                 @default(now()) @db.Timestamp(6)
+  lms_module              lms_module                @relation(fields: [module_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lms_submodule_question  lms_submodule_question[]
+  lms_user_submodule_view lms_user_submodule_view[]
 
   @@index([module_id], map: "idx_lms_submodule_module")
   @@index([is_test], map: "idx_lms_submodule_test")
@@ -496,6 +501,39 @@ model lms_user_roadmap_view {
   @@unique([user_id, roadmap_id])
   @@index([roadmap_id], map: "idx_lms_urv_roadmap")
   @@index([user_id], map: "idx_lms_urv_user")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model lms_course_dependency {
+  id                                                            Int        @id @default(autoincrement())
+  course_id                                                     Int
+  parent_course_id                                              Int
+  lms_course_lms_course_dependency_course_idTolms_course        lms_course @relation("lms_course_dependency_course_idTolms_course", fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lms_course_lms_course_dependency_parent_course_idTolms_course lms_course @relation("lms_course_dependency_parent_course_idTolms_course", fields: [parent_course_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([course_id, parent_course_id])
+  @@index([course_id], map: "idx_lms_dep_course")
+  @@index([parent_course_id], map: "idx_lms_dep_parent")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model lms_user_submodule_view {
+  id            Int           @id @default(autoincrement())
+  user_id       Int
+  submodule_id  Int
+  module_id     Int
+  course_id     Int
+  status        String?       @db.VarChar(20)
+  started_at    DateTime?     @db.Timestamp(6)
+  completed_at  DateTime?     @db.Timestamp(6)
+  lms_course    lms_course    @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lms_module    lms_module    @relation(fields: [module_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lms_submodule lms_submodule @relation(fields: [submodule_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([user_id, submodule_id])
+  @@index([status], map: "idx_lms_usv_status")
+  @@index([submodule_id], map: "idx_lms_usv_submodule")
+  @@index([user_id], map: "idx_lms_usv_user")
 }
 
 enum difficulty_enum {

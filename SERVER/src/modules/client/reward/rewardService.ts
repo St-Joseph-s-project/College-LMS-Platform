@@ -197,3 +197,16 @@ export const buyRewardService = async ({ prisma, userId, rewardId }: { prisma: T
         timeout: 10000, // default: 5000
     });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
