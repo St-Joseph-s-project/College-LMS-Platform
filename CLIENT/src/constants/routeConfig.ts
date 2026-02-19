@@ -1,10 +1,10 @@
 import React from "react";
 import type { ComponentType, ReactNode } from "react";
-import { 
-  LayoutDashboard, 
-  Gift, 
-  Plus, 
-  TrendingUp, 
+import {
+  LayoutDashboard,
+  Gift,
+  Plus,
+  TrendingUp,
   History,
   ShoppingBag,
   BarChart3
@@ -52,6 +52,7 @@ export const ADMIN_ROUTE_MAP: Record<string, RouteConfig> = {
     permission: ADMIN_PERMISSIONS.REWARDS.VIEW,
     label: "Rewards",
     icon: React.createElement(Gift, { size: 18 }),
+    component: CreateReward,
     children: [
       {
         path: "/dashboard/admin/rewards/create",
@@ -210,7 +211,7 @@ export const getRouteByPath = (
  */
 export const flattenRoutes = (routes: RouteConfig[]): RouteConfig[] => {
   const flattened: RouteConfig[] = [];
-  
+
   routes.forEach((route) => {
     if (route.component) {
       flattened.push(route);
@@ -219,7 +220,7 @@ export const flattenRoutes = (routes: RouteConfig[]): RouteConfig[] => {
       flattened.push(...flattenRoutes(route.children));
     }
   });
-  
+
   return flattened;
 };
 

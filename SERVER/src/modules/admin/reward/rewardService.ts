@@ -166,6 +166,114 @@ export const updateRewardService = async (
   return updatedReward;
 };
 
+<<<<<<< HEAD:SERVER/src/modules/admin/adminService.ts
+// this is the admin service for getting all orders (user_rewards)
+export const getOrdersService = async (req: any) => {
+  const tenantPrisma = req.tenantPrisma;
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 10;
+  const status = req.query.status ? (req.query.status as string).split(',') : undefined;
+  const search = req.query.search as string;
+
+  const where: any = {};
+
+  if (status) {
+    where.status = { in: status };
+  }
+
+  if (search) {
+    where.OR = [
+      { users: { name: { contains: search, mode: 'insensitive' } } },
+      { users: { registration_no: { contains: search, mode: 'insensitive' } } },
+    ];
+  }
+
+  const [orders, total] = await Promise.all([
+    tenantPrisma.users_rewards.findMany({
+      where,
+      select: {
+        id: true,
+        status: true,
+        ordered_date: true,
+        delivered_date: true,
+        users: {
+          select: {
+            id: true,
+            name: true,
+            registration_no: true,
+            department_id: true,
+            // You might want to include department name here if available via relation
+          }
+        },
+        rewards: {
+          select: {
+            id: true,
+            title: true,
+            coins: true,
+            image_url: true
+          }
+        }
+      },
+      orderBy: { ordered_date: 'desc' },
+      skip: (page - 1) * limit,
+      take: limit,
+    }),
+    tenantPrisma.users_rewards.count({ where })
+  ]);
+
+  return {
+    data: orders,
+    meta: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit)
+    }
+  };
+};
+
+// this is the admin service for updating order status
+export const updateOrderStatusService = async (req: any, id: number, status: string) => {
+  const tenantPrisma = req.tenantPrisma;
+
+  return await tenantPrisma.$transaction(async (tx: any) => {
+    const order = await tx.users_rewards.findUnique({
+      where: { id },
+      include: {
+        rewards: true,
+        users: true
+      }
+    });
+
+    if (!order) {
+      throw new CustomError({
+        message: "Order not found",
+        statusCode: STATUS_CODE.NOT_FOUND
+      });
+    }
+
+    // REFUND LOGIC: If rejecting, and it wasn't already rejected/refumed
+    if (status === 'REJECTED' && order.status !== 'REJECTED') {
+      await tx.users.update({
+        where: { id: order.user_id },
+        data: {
+          coins: {
+            increment: order.rewards.coins
+          }
+        }
+      });
+    }
+
+    const updatedOrder = await tx.users_rewards.update({
+      where: { id },
+      data: {
+        status,
+        delivered_date: status === 'DELIVERED' ? new Date() : order.delivered_date
+      }
+    });
+
+    return updatedOrder;
+=======
 
 
 
@@ -248,5 +356,6 @@ export const getDeliveredRewardsService = async (req: any) => {
     orderBy: {
       delivered_date: "desc",
     },
+>>>>>>> ashwin/lms_core:SERVER/src/modules/admin/reward/rewardService.ts
   });
 };
