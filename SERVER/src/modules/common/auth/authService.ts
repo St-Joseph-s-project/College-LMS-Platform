@@ -15,7 +15,7 @@ export const loginService = async ({ email, password }: { email: string; passwor
 	const uniq_string = domain.split('.')[0]; // e.g., "sjit"
 
 	// Get admin database connection
-	const adminPrisma = getAdminPrisma();
+  const adminPrisma = getAdminPrisma();
 
 	// Check if college exists in lms_admin database
 	const tenant = await adminPrisma.tenants.findUnique({
@@ -27,7 +27,8 @@ export const loginService = async ({ email, password }: { email: string; passwor
 			db_string: true,
 			is_active: true,
 		},
-	});
+  });
+  
 
 	if (!tenant) {
 		throw new CustomError({ message: 'College not found', statusCode: STATUS_CODE.NOT_FOUND });
@@ -41,9 +42,9 @@ export const loginService = async ({ email, password }: { email: string; passwor
 	const tenantPrisma = getTenantConnection(tenant.db_string, tenant.id);
 
 	// Find user in tenant database
-	const user = await tenantPrisma.users.findUnique({
+  const user = await tenantPrisma.users.findUnique({
 		where: { email },
-	});
+  });
 
 	if (!user) {
 		throw new CustomError({ message: 'Invalid credentials', statusCode: STATUS_CODE.UNAUTHORIZED });

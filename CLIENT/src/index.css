@@ -1,17 +1,8 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
 
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
+
 
 html {
   scroll-behavior: smooth;
@@ -43,7 +34,7 @@ html {
   /* PixelPrep Theme Variables */
   --input-bg: rgba(229, 231, 235, 0.4);
   --input-text: #1f2937;
-  --card-glass: rgba(255, 255, 255, 0.45);
+  --card-glass: rgba(255, 255, 255, 0.70);
   --card-border: rgba(255, 255, 255, 0.3);
 
   /* Particle Colors (Light) */
@@ -217,24 +208,11 @@ html {
   text-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent), 0 0 20px var(--accent);
 }
 
-@keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
 @utility animate-float-slow {
   animation: float 6s ease-in-out infinite;
 }
 
 @keyframes pulse-glow {
-
   0%,
   100% {
     box-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent);

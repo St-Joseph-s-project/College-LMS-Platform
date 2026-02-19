@@ -1,4 +1,5 @@
 import express from "express";
+<<<<<<< HEAD
 import multer from "multer";
 import path from "path";
 import fs from "fs";
@@ -100,10 +101,22 @@ router.put(
   adminValidators.updateReward,
   updateRewardController
 );
+=======
+import rewardRouter from "./reward/rewardRouter"
+import courseRouter from "./course/courseRouter"
+import subModuleRouter from "./submodule/subModuleRouter"
+import moduleRouter from "./module/moduleRouter"
 
+const router = express.Router();
+>>>>>>> ashwin/lms_core
 
+router.use("/reward", rewardRouter);
 
+router.use("/course", courseRouter)
 
+router.use("/submodule", subModuleRouter)
+
+<<<<<<< HEAD
 // this route (get method) is used to get all orders
 router.get(
   "/orders",
@@ -112,6 +125,9 @@ router.get(
   checkPermission("LMS_REWARDS_VIEW"),
   getOrdersController
 );
+=======
+router.use("/module", moduleRouter)
+>>>>>>> ashwin/lms_core
 
 // this route (put method) is used to update order status
 router.put(

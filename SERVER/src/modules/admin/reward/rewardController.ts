@@ -3,10 +3,13 @@ import {
   createRewardService,
   getRewardsService,
   deleteRewardService,
-  getRewardByIdService
-} from "./adminService";
-import { CustomError, Response } from "../../utils";
-import { STATUS_CODE } from "../../constants/appConstants";
+  getRewardByIdService,
+  updateRewardService,
+  getDeliveredRewardsService,
+  getPendingRewardsService
+} from "./rewardService";
+import { CustomError, Response } from "../../../utils";
+import { STATUS_CODE } from "../../../constants/appConstants";
 
 
 
@@ -135,8 +138,7 @@ export const deleteRewardController = async (req: Request, res: ExpressResponse)
 
 
 
-// this is the code to update the rewards details 
-import { updateRewardService } from "./adminService";
+
 
 export const updateRewardController = async (
   req: Request,
@@ -172,6 +174,7 @@ export const updateRewardController = async (
   }
 };
 
+<<<<<<< HEAD:SERVER/src/modules/admin/adminController.ts
 // this is controller for getting orders
 export const getOrdersController = async (req: Request, res: ExpressResponse) => {
   try {
@@ -182,6 +185,31 @@ export const getOrdersController = async (req: Request, res: ExpressResponse) =>
       res,
       data: result,
       message: "Orders fetched successfully",
+=======
+
+
+
+
+
+
+
+
+
+
+
+// 🔥 Track Rewards (Pending)
+export const getPendingRewardsController = async (
+  req: Request,
+  res: ExpressResponse
+) => {
+  try {
+    const data = await getPendingRewardsService(req);
+
+    return Response({
+      res,
+      data,
+      message: "Pending rewards fetched successfully",
+>>>>>>> ashwin/lms_core:SERVER/src/modules/admin/reward/rewardController.ts
       statusCode: STATUS_CODE.OK
     });
   } catch (err: any) {
@@ -194,6 +222,7 @@ export const getOrdersController = async (req: Request, res: ExpressResponse) =>
   }
 };
 
+<<<<<<< HEAD:SERVER/src/modules/admin/adminController.ts
 // this is controller for updating order status
 export const updateOrderStatusController = async (req: Request, res: ExpressResponse) => {
   try {
@@ -214,6 +243,21 @@ export const updateOrderStatusController = async (req: Request, res: ExpressResp
       res,
       data: result,
       message: "Order status updated successfully",
+=======
+
+// 🔥 History Rewards (Delivered)
+export const getDeliveredRewardsController = async (
+  req: Request,
+  res: ExpressResponse
+) => {
+  try {
+    const data = await getDeliveredRewardsService(req);
+
+    return Response({
+      res,
+      data,
+      message: "Delivered rewards fetched successfully",
+>>>>>>> ashwin/lms_core:SERVER/src/modules/admin/reward/rewardController.ts
       statusCode: STATUS_CODE.OK
     });
   } catch (err: any) {
@@ -221,9 +265,13 @@ export const updateOrderStatusController = async (req: Request, res: ExpressResp
       res,
       data: null,
       message: err.message,
+<<<<<<< HEAD:SERVER/src/modules/admin/adminController.ts
       statusCode: err instanceof CustomError
         ? err.statusCode
         : STATUS_CODE.INTERNAL_SERVER_ERROR
+=======
+      statusCode: STATUS_CODE.INTERNAL_SERVER_ERROR
+>>>>>>> ashwin/lms_core:SERVER/src/modules/admin/reward/rewardController.ts
     });
   }
 };

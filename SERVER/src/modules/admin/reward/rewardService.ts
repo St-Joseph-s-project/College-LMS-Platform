@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
-import { STATUS_CODE } from "../../constants/appConstants";
-import { CustomError } from "../../utils";
+import { STATUS_CODE } from "../../../constants/appConstants";
+import { CustomError } from "../../../utils";
 
 // this is the Reward Creation Service code 
 export const createRewardService = async (req: any, data: any, file: any) => {
@@ -150,7 +150,7 @@ export const updateRewardService = async (
     imageUrl = `/uploads/rewards/${file.filename}`;
     imageKey = file.filename;
   }
-
+  
   const updatedReward = await tenantPrisma.rewards.update({
     where: { id },
     data: {
@@ -163,10 +163,10 @@ export const updateRewardService = async (
       image_key: imageKey
     }
   });
-
   return updatedReward;
 };
 
+<<<<<<< HEAD:SERVER/src/modules/admin/adminService.ts
 // this is the admin service for getting all orders (user_rewards)
 export const getOrdersService = async (req: any) => {
   const tenantPrisma = req.tenantPrisma;
@@ -273,5 +273,89 @@ export const updateOrderStatusService = async (req: any, id: number, status: str
     });
 
     return updatedOrder;
+=======
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 🔥 Get all pending reward orders (Track Rewards)
+export const getPendingRewardsService = async (req: any) => {
+  const tenantPrisma = req.tenantPrisma;
+
+  return await tenantPrisma.users_rewards.findMany({
+    where: {
+      status: "PENDING",
+    },
+    include: {
+      users: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      rewards: {
+        select: {
+          id: true,
+          title: true,
+          coins: true,
+          image_url: true,
+        },
+      },
+    },
+    orderBy: {
+      ordered_date: "desc",
+    },
+  });
+};
+
+
+// 🔥 Get all delivered reward orders (History)
+export const getDeliveredRewardsService = async (req: any) => {
+  const tenantPrisma = req.tenantPrisma;
+
+  return await tenantPrisma.users_rewards.findMany({
+    where: {
+      status: "DELIVERED",
+    },
+    include: {
+      users: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      rewards: {
+        select: {
+          id: true,
+          title: true,
+          coins: true,
+          image_url: true,
+        },
+      },
+    },
+    orderBy: {
+      delivered_date: "desc",
+    },
+>>>>>>> ashwin/lms_core:SERVER/src/modules/admin/reward/rewardService.ts
   });
 };

@@ -35,7 +35,11 @@ const ClientLayout: React.FC = () => {
           padding: "24px 24px 24px 0"
         }}
       >
+<<<<<<< HEAD
         <div className="w-full h-full min-h-[calc(100vh-48px)] bg-white/75 dark:bg-black/50 backdrop-blur-3xl border border-gray-200 dark:border-white/10 rounded-2xl shadow-xl overflow-y-auto p-8 flex flex-col items-start">
+=======
+        <div className="w-full h-full  glass-card rounded-[32px] overflow-y-auto p-12 flex flex-col items-start">
+>>>>>>> ashwin/lms_core
           <Outlet />
         </div>
       </main>

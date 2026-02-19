@@ -1,7 +1,7 @@
 import { PrismaClient as TenantPrismaClient } from '@prisma/tenant-client';
-import { CustomError } from '../../utils';
-import { STATUS_CODE } from '../../constants';
-import logger from '../../config/logger';
+import { CustomError } from '../../../utils';
+import { STATUS_CODE } from '../../../constants';
+import logger from '../../../config/logger';
 
 export const getAllRewardsService = async ({ prisma, page = 1, limit = 10 }: { prisma: TenantPrismaClient, page?: number, limit?: number }) => {
     if (!prisma) {
@@ -197,3 +197,16 @@ export const buyRewardService = async ({ prisma, userId, rewardId }: { prisma: T
         timeout: 10000, // default: 5000
     });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

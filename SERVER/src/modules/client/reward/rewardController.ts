@@ -1,8 +1,7 @@
 import type { Request, Response as ExpressResponse } from 'express';
-import { Response } from '../../utils';
-import { STATUS_CODE } from '../../constants/appConstants';
-import { CustomError } from '../../utils/CustomError';
-import { getAllRewardsService, getRewardByIdService, buyRewardService, getClientRewardsHistoryService } from './clientService';
+import { Response, CustomError } from '../../../utils';
+import { STATUS_CODE } from '../../../constants';
+import { getAllRewardsService, getRewardByIdService, buyRewardService, getClientRewardsHistoryService, } from './rewardService';
 
 
 export const getAllRewardsController = async (req: Request, res: ExpressResponse) => {
@@ -206,3 +205,16 @@ export const buyRewardController = async (req: Request, res: ExpressResponse) =>
         });
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
