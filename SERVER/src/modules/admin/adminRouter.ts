@@ -7,9 +7,10 @@ import {
   getRewardsController,
   deleteRewardController,
   getRewardByIdController,
-  updateRewardController
+  updateRewardController,
+  getOrdersController,
+  updateOrderStatusController,
 } from "./adminController";
-
 import { adminValidators } from "./adminValidator";
 import { checkPermission, validateJWT, validateTenant } from "../../middleware";
 
@@ -47,12 +48,12 @@ const upload = multer({ storage });
 //this route (method post) is used to put the new rewards in db
 router.post(
   "/rewards",
-  validateJWT,                     
-  validateTenant,                  
-  checkPermission("LMS_REWARDS_ADD"), 
-  upload.single("image"),           
-  adminValidators.createReward,     
-  createRewardController            
+  validateJWT,
+  validateTenant,
+  checkPermission("LMS_REWARDS_ADD"),
+  upload.single("image"),
+  adminValidators.createReward,
+  createRewardController
 );
 
 
@@ -103,7 +104,23 @@ router.put(
 
 
 
+// this route (get method) is used to get all orders
+router.get(
+  "/orders",
+  validateJWT,
+  validateTenant,
+  checkPermission("LMS_REWARDS_VIEW"),
+  getOrdersController
+);
 
+// this route (put method) is used to update order status
+router.put(
+  "/orders/:id/status",
+  validateJWT,
+  validateTenant,
+  checkPermission("LMS_REWARDS_UPDATE"),
+  updateOrderStatusController
+);
 router.use("/health", (req, res) => {
   res.json("ADMIN REWARD MODULE HEALTH OK");
 });

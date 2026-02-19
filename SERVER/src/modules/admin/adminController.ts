@@ -171,3 +171,59 @@ export const updateRewardController = async (
     });
   }
 };
+
+// this is controller for getting orders
+export const getOrdersController = async (req: Request, res: ExpressResponse) => {
+  try {
+    const { getOrdersService } = await import("./adminService");
+    const result = await getOrdersService(req);
+
+    return Response({
+      res,
+      data: result,
+      message: "Orders fetched successfully",
+      statusCode: STATUS_CODE.OK
+    });
+  } catch (err: any) {
+    return Response({
+      res,
+      data: null,
+      message: err.message,
+      statusCode: STATUS_CODE.INTERNAL_SERVER_ERROR
+    });
+  }
+};
+
+// this is controller for updating order status
+export const updateOrderStatusController = async (req: Request, res: ExpressResponse) => {
+  try {
+    const id = Number(req.params.id);
+    const { status } = req.body;
+
+    if (!status) {
+      throw new CustomError({
+        message: "Status is required",
+        statusCode: STATUS_CODE.BAD_REQUEST
+      });
+    }
+
+    const { updateOrderStatusService } = await import("./adminService");
+    const result = await updateOrderStatusService(req, id, status);
+
+    return Response({
+      res,
+      data: result,
+      message: "Order status updated successfully",
+      statusCode: STATUS_CODE.OK
+    });
+  } catch (err: any) {
+    return Response({
+      res,
+      data: null,
+      message: err.message,
+      statusCode: err instanceof CustomError
+        ? err.statusCode
+        : STATUS_CODE.INTERNAL_SERVER_ERROR
+    });
+  }
+};
