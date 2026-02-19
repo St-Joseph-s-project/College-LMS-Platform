@@ -59,6 +59,8 @@ const Sidebar: React.FC<SidebarProps> = ({ routes, onNavigate, isCollapsed, onTo
   const isParentActive = (path: string) => location.pathname.startsWith(path + "/") && location.pathname !== path;
 
   const renderMenuItem = (route: RouteConfig, level: number = 0) => {
+    if (route.showInSidebar === false) return null;
+
     const hasChildren = route.children && route.children.length > 0;
     const isExpanded = expandedMenus.includes(route.path) || isParentActive(route.path);
     const exactActive = isExactActive(route.path);
