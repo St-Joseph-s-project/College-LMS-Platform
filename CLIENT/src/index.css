@@ -31,7 +31,7 @@ html {
   --glass-border: rgba(0, 0, 0, 0.1);
   --glass-hover: rgba(37, 99, 235, 0.05);
 
-  /* PixelPrep Theme Variables */
+  /* LMS Theme Variables */
   --input-bg: rgba(229, 231, 235, 0.4);
   --input-text: #1f2937;
   --card-glass: rgba(255, 255, 255, 0.70);
@@ -69,7 +69,7 @@ html {
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-hover: rgba(76, 143, 255, 0.05);
 
-  /* PixelPrep Dark Theme Variables */
+  /* LMS Dark Theme Variables */
   --input-bg: rgba(31, 41, 55, 0.4);
   --input-text: #f3f4f6;
   --card-glass: rgba(15, 23, 42, 0.45);

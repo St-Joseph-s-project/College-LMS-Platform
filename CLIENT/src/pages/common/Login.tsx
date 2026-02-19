@@ -77,11 +77,11 @@ export default function Login() {
           <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto">
 
             <div className="flex flex-col items-center mb-8 text-center">
-              <div className="animate-float-slow mb-4">
+              <div className=" mb-4">
                 <img src={logo} alt="Logo" className="w-56 h-auto drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]" />
               </div>
-              <h1 className="text-4xl font-bold text-[var(--text-primary)] mb-1 neon-text tracking-tight">PIXELPREP</h1>
-              <p className="text-[var(--text-secondary)] text-sm font-medium tracking-wide uppercase opacity-80">A Reward Based Learning System</p>
+              <h1 className="text-4xl font-bold text-[var(--text-primary)]">LMS</h1>
+
             </div>
 
             <div className="w-full mb-6">

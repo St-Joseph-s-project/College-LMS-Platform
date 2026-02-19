@@ -79,13 +79,8 @@ const Sidebar: React.FC<SidebarProps> = ({ routes, onNavigate, isCollapsed, onTo
             }
           }}
           className={`
-<<<<<<< HEAD
-            flex items-center cursor-pointer transition-all duration-300 group rounded-xl mx-8 mb-2
-            ${isCollapsed ? 'justify-center px-0 py-4' : 'justify-start px-6 py-3'}
-=======
             flex items-center cursor-pointer transition-all duration-300 group rounded-2xl mb-2
             ${isCollapsed ? 'mx-2 justify-center px-0 py-4' : 'mx-6 justify-start px-3 py-3'}
->>>>>>> ashwin/lms_core
             ${exactActive
               ? 'bg-blue-600 dark:bg-blue-600/30 text-white shadow-[0_8px_20px_-6px_rgba(37,99,235,0.5)]'
               : parentActive
@@ -94,8 +89,8 @@ const Sidebar: React.FC<SidebarProps> = ({ routes, onNavigate, isCollapsed, onTo
             ${!isCollapsed && level > 0 ? 'pl-12' : ''}
           `}
         >
-          <div className={`${anyActive ? 'text-white dark:text-blue-400' : 'text-inherit group-hover:text-blue-600 dark:group-hover:text-blue-400'} transition-colors duration-300 flex-shrink-0`}>
-            {route.icon || <div className="w-[18px] h-[18px] flex items-center justify-center">•</div>}
+          <div className={`${anyActive ? 'text-white dark:text-blue-400' : 'text-inherit group-hover:text-blue-600 dark:group-hover:text-blue-400'} transition-colors duration-300 flex-shrink-0 flex items-center justify-center`}>
+            {route.icon || <div className="w-[18px] h-[18px] flex items-center justify-center font-bold">•</div>}
           </div>
           {!isCollapsed && (
             <>
@@ -123,18 +118,12 @@ const Sidebar: React.FC<SidebarProps> = ({ routes, onNavigate, isCollapsed, onTo
     <div
       className={`
         ${isCollapsed ? 'w-20' : 'w-[260px]'}
-<<<<<<< HEAD
-        fixed left-6 top-6 bottom-6 z-[1000]
+        ${className.includes('static') ? '' : 'fixed left-6 top-6 bottom-6'} z-[1000]
         bg-white/70 dark:bg-black/40 backdrop-blur-3xl 
         border border-gray-200 dark:border-white/10 
         rounded-2xl transition-all duration-500 ease-in-out
         flex flex-col shadow-xl overflow-hidden
-=======
-        ${className.includes('static') ? '' : 'fixed left-6 top-6 bottom-6'} z-[1000]
-        glass-card rounded-[32px] transition-all duration-500 ease-in-out
-        flex flex-col overflow-hidden
         ${className}
->>>>>>> ashwin/lms_core
       `}
     >
       {/* Header / Brand */}
@@ -147,7 +136,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes, onNavigate, isCollapsed, onTo
       >
         {!isCollapsed && (
           <h1 className="text-xl font-black tracking-tighter text-gray-900 dark:text-white m-0 whitespace-nowrap">
-            PIXELPREP
+            LMS
           </h1>
         )}
         <button
