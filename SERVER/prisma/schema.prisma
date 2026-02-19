@@ -432,11 +432,13 @@ model lms_submodule {
   content                String?
   is_test                Boolean?                 @default(false)
   created_at             DateTime?                @default(now()) @db.Timestamp(6)
+  order_index            Int?                     @default(0)
   lms_module             lms_module               @relation(fields: [module_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   lms_submodule_question lms_submodule_question[]
 
   @@index([module_id], map: "idx_lms_submodule_module")
   @@index([is_test], map: "idx_lms_submodule_test")
+  @@index([module_id, order_index], map: "idx_lms_submodule_order")
 }
 
 model lms_submodule_question {

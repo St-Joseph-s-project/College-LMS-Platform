@@ -13,16 +13,30 @@ export interface CreateModuleRequest {
   name: string;
   description?: string;
   orderIndex?: number;
+  isPublished?: boolean;
 }
 
 export interface UpdateModuleRequest {
   name?: string;
   description?: string;
   orderIndex?: number;
+  isPublished?: boolean;
 }
 
 export interface UpdateModuleVisibilityRequest {
   isPublished: boolean;
+}
+
+export interface SubModuleDetailsResponse {
+  course: {
+    name: string;
+    is_published: boolean;
+  };
+  module: {
+    name: string;
+    is_published: boolean;
+    description?: string;
+  };
 }
 
 export interface ApiResponse<T> {

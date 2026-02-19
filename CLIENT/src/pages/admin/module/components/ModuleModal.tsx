@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { X, Loader } from "lucide-react";
-import { createModule, updateModule } from "../api/moduleApi";
+import ToggleSwitch from "../../../../components/ui/ToggleSwitch";
+import { createModule, updateModule, updateModuleVisibility } from "../api/moduleApi";
 import type { Module } from "../types/module";
 
 interface ModuleModalProps {
@@ -21,6 +22,7 @@ const ModuleModal: React.FC<ModuleModalProps> = ({
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [orderIndex, setOrderIndex] = useState<number | undefined>(undefined);
+  const [isPublished, setIsPublished] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -28,10 +30,12 @@ const ModuleModal: React.FC<ModuleModalProps> = ({
       setName(module.name);
       setDescription(module.description || "");
       setOrderIndex(module.order_index);
+      setIsPublished(module.is_published);
     } else {
       setName("");
       setDescription("");
       setOrderIndex(undefined);
+      setIsPublished(true); // Default to published for new modules? Or false? User didn't specify, default true is often friendlier but false is safer. Let's go with true as it's common to want things visible immediately unless specified.
     }
   }, [module, isOpen]);
 
@@ -41,16 +45,24 @@ const ModuleModal: React.FC<ModuleModalProps> = ({
 
     try {
       if (module) {
+        // Update module details
         await updateModule(module.id, {
           name,
           description,
           orderIndex,
         });
+
+        // Update visibility if changed
+        if (module.is_published !== isPublished) {
+          await updateModuleVisibility(module.id, { isPublished });
+        }
       } else {
+        // Create module
         await createModule(courseId, {
           name,
           description,
-          orderIndex
+          orderIndex,
+          isPublished
         });
       }
       onSuccess();
@@ -122,6 +134,20 @@ const ModuleModal: React.FC<ModuleModalProps> = ({
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               placeholder="e.g. 1"
             />
+          </div>
+
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Visibility
+            </label>
+            <div className="flex items-center gap-2 mt-2">
+              <ToggleSwitch
+                checked={isPublished}
+                onChange={setIsPublished}
+                label={isPublished ? "Published" : "Draft"}
+              />
+            </div>
           </div>
 
           <div className="flex justify-end gap-3 mt-6 pt-2">

@@ -1,9 +1,10 @@
 
 import React, { useEffect, useState } from "react";
-import { Plus, Edit2, Trash2, Eye, EyeOff, Search } from "lucide-react";
+import { Plus, Edit2, Trash2, Search } from "lucide-react";
 import { getAllCourses, deleteCourse, updateCourseVisibility } from "../api/courseApi";
 import type { Course } from "../types/course";
 import CourseModal from "../components/CourseModal";
+import ToggleSwitch from "../../../../components/ui/ToggleSwitch";
 
 export const CreateCourse: React.FC = () => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -134,16 +135,12 @@ export const CreateCourse: React.FC = () => {
                       {new Date(course.created_at).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 text-right space-x-2">
-                      <button
-                        onClick={() => handleToggleVisibility(course)}
-                        className={`p-1.5 rounded-md transition-colors ${course.is_published
-                          ? "text-orange-500 hover:bg-orange-50"
-                          : "text-green-600 hover:bg-green-50"
-                          }`}
-                        title={course.is_published ? "Unpublish" : "Publish"}
-                      >
-                        {course.is_published ? <EyeOff size={18} /> : <Eye size={18} />}
-                      </button>
+                      <div className="flex items-center justify-end">
+                        <ToggleSwitch
+                          checked={course.is_published}
+                          onChange={() => handleToggleVisibility(course)}
+                        />
+                      </div>
                       <button
                         onClick={() => handleEditCourse(course)}
                         className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"

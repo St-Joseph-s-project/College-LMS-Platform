@@ -5,6 +5,7 @@ import type {
   CreateModuleRequest,
   UpdateModuleRequest,
   UpdateModuleVisibilityRequest,
+  SubModuleDetailsResponse,
 } from "../types/module";
 
 const BASE_URL = "/admin/module";
@@ -57,3 +58,4 @@ export const deleteModule = async (moduleId: number): Promise<ApiResponse<null>>
   });
   return response;
 };
+
