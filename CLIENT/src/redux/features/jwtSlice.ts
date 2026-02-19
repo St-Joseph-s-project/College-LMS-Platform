@@ -7,12 +7,12 @@ type jwtState = {
 }
 
 type saveState = {
-  jwtToken: string ,
+  jwtToken: string,
   refreshToken?: string // Optional, since it's now in cookies
 }
 
 const initialState: jwtState = {
-  jwtToken: null,
+  jwtToken: sessionStorage.getItem(JWT_TOKEN_NAME) || null,
 }
 
 const jwtSlice = createSlice({
