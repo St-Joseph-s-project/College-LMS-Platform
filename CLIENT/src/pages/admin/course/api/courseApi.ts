@@ -59,3 +59,13 @@ export const updateCourseVisibility = async (
   });
   return response;
 };
+
+export const getCoursesDropdown = async (search?: string): Promise<ApiResponse<{ id: number; name: string }[]>> => {
+  const data = await getApi({
+    url: `${BASE_URL}/get-all/dropdown`,
+    data: { courseName: search },
+    showLoader: false,
+    showToaster: false
+  });
+  return data;
+};

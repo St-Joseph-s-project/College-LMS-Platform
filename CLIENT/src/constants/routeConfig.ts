@@ -95,9 +95,18 @@ export const ADMIN_ROUTE_MAP: Record<string, RouteConfig> = {
         label: "Create Module",
         icon: React.createElement(Plus, { size: 18 }),
         component: ModulePage,
+        
       },
       {
-        path: "/dashboard/admin/submodule/{courseId}/{moduleId}",
+        path: "/dashboard/admin/module/create/:courseId",
+        permission: ADMIN_PERMISSIONS.MODULE.CREATE,
+        label: "Create Module",
+        icon: React.createElement(Plus, { size: 18 }),
+        component: ModulePage,
+        showInSidebar: false
+      },
+      {
+        path: "/dashboard/admin/submodule/:courseId/:moduleId",
         permission: ADMIN_PERMISSIONS.SUBMODULE.CREATE,
         label: "Create Submodule",
         icon: React.createElement(Plus, { size: 18 }),

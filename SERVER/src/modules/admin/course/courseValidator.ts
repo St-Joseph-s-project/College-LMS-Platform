@@ -1,4 +1,4 @@
-import { body, validationResult } from "express-validator";
+import { body, query, validationResult } from "express-validator";
 import { Request, Response as ExpressResponse, NextFunction } from "express";
 import { Response } from "../../../utils";
 import { STATUS_CODE } from "../../../constants/appConstants";
@@ -49,6 +49,15 @@ export const courseValidator = {
       .isBoolean()
       .withMessage("is_published must be a boolean"),
 
+    validator
+  ],
+
+  getCourseDropdown: [
+    query("courseName")
+      .optional()
+      .isString()
+      .withMessage("courseName must be a string"),
+    
     validator
   ]
 };
