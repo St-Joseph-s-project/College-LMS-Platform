@@ -29,7 +29,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const data: loginResponseType = await postApi({ url: "/api/auth/login", data: { email, password } });
+      const data: loginResponseType = await postApi({ url: "/auth/login", data: { email, password } });
 
       const token = data.data.token;
       const role = data.data.role;
@@ -67,7 +67,7 @@ export default function Login() {
         </div>
 
         {/* Right Side: Branding & Login Form */}
-        <div className="relative z-20 flex flex-col justify-center items-center h-full p-8 sm:p-12 bg-[var(--card-glass)] backdrop-blur-md transition-colors duration-300">
+        <div className="relative z-20 flex flex-col justify-center items-center h-full p-8 sm:p-12 backdrop-blur-md transition-colors duration-300">
 
           {/* Theme Toggle */}
           <div className="absolute top-6 right-6 z-30">

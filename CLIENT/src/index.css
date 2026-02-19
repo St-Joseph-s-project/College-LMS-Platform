@@ -41,10 +41,10 @@ html {
   --glass-hover: rgba(37, 99, 235, 0.05);
 
   /* PixelPrep Theme Variables */
-  --input-bg: #e5e7eb;
+  --input-bg: rgba(229, 231, 235, 0.4);
   --input-text: #1f2937;
-  --card-glass: rgba(255, 255, 255, 0.7);
-  --card-border: rgba(255, 255, 255, 0.5);
+  --card-glass: rgba(255, 255, 255, 0.45);
+  --card-border: rgba(255, 255, 255, 0.3);
 
   /* Particle Colors (Light) */
   --particle-1: 37, 99, 235;
@@ -79,9 +79,9 @@ html {
   --glass-hover: rgba(76, 143, 255, 0.05);
 
   /* PixelPrep Dark Theme Variables */
-  --input-bg: #1f2937;
+  --input-bg: rgba(31, 41, 55, 0.4);
   --input-text: #f3f4f6;
-  --card-glass: rgba(15, 23, 42, 0.7);
+  --card-glass: rgba(15, 23, 42, 0.45);
   --card-border: rgba(255, 255, 255, 0.1);
 
   /* Particle Colors (Dark - Neon) */
@@ -208,9 +208,9 @@ html {
 
 @utility glass-card {
   background: var(--card-glass);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(20px);
   border: 1px solid var(--card-border);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
 }
 
 @utility neon-text {

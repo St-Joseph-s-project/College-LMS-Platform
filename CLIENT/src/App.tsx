@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminLayout from "./components/layouts/AdminLayout";
 import ClientLayout from "./components/layouts/ClientLayout";
@@ -11,6 +11,8 @@ import { Loader } from "./components";
 
 function App() {
   const isLoading: boolean = useAppSelector((s: any) => s.loading.isLoading);
+  const { jwtToken } = useAppSelector((state) => state.jwtSlice);
+  const { role } = useAppSelector((state) => state.permissions);
   return (
     <BrowserRouter>
       {isLoading && (
@@ -18,7 +20,16 @@ function App() {
       )}
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<Login />} />
+        <Route
+          path="/"
+          element={
+            jwtToken ? (
+              <Navigate to={role === "ADMIN" ? "/dashboard/admin" : "/dashboard/student"} replace />
+            ) : (
+              <Login />
+            )
+          }
+        />
         <Route path="/unauthorized" element={<Unauthorized />} />
 
         {/* Admin Dashboard Routes */}
