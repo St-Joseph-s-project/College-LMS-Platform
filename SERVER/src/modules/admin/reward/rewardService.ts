@@ -150,7 +150,7 @@ export const updateRewardService = async (
     imageUrl = `/uploads/rewards/${file.filename}`;
     imageKey = file.filename;
   }
-
+  
   const updatedReward = await tenantPrisma.rewards.update({
     where: { id },
     data: {
@@ -163,6 +163,90 @@ export const updateRewardService = async (
       image_key: imageKey
     }
   });
-
   return updatedReward;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 🔥 Get all pending reward orders (Track Rewards)
+export const getPendingRewardsService = async (req: any) => {
+  const tenantPrisma = req.tenantPrisma;
+
+  return await tenantPrisma.users_rewards.findMany({
+    where: {
+      status: "PENDING",
+    },
+    include: {
+      users: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      rewards: {
+        select: {
+          id: true,
+          title: true,
+          coins: true,
+          image_url: true,
+        },
+      },
+    },
+    orderBy: {
+      ordered_date: "desc",
+    },
+  });
+};
+
+
+// 🔥 Get all delivered reward orders (History)
+export const getDeliveredRewardsService = async (req: any) => {
+  const tenantPrisma = req.tenantPrisma;
+
+  return await tenantPrisma.users_rewards.findMany({
+    where: {
+      status: "DELIVERED",
+    },
+    include: {
+      users: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      rewards: {
+        select: {
+          id: true,
+          title: true,
+          coins: true,
+          image_url: true,
+        },
+      },
+    },
+    orderBy: {
+      delivered_date: "desc",
+    },
+  });
 };

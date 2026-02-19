@@ -4,7 +4,9 @@ import {
   getRewardsService,
   deleteRewardService,
   getRewardByIdService,
-  updateRewardService
+  updateRewardService,
+  getDeliveredRewardsService,
+  getPendingRewardsService
 } from "./rewardService";
 import { CustomError, Response } from "../../../utils";
 import { STATUS_CODE } from "../../../constants/appConstants";
@@ -168,6 +170,66 @@ export const updateRewardController = async (
         err instanceof CustomError
           ? err.statusCode
           : STATUS_CODE.INTERNAL_SERVER_ERROR
+    });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+// 🔥 Track Rewards (Pending)
+export const getPendingRewardsController = async (
+  req: Request,
+  res: ExpressResponse
+) => {
+  try {
+    const data = await getPendingRewardsService(req);
+
+    return Response({
+      res,
+      data,
+      message: "Pending rewards fetched successfully",
+      statusCode: STATUS_CODE.OK
+    });
+  } catch (err: any) {
+    return Response({
+      res,
+      data: null,
+      message: err.message,
+      statusCode: STATUS_CODE.INTERNAL_SERVER_ERROR
+    });
+  }
+};
+
+
+// 🔥 History Rewards (Delivered)
+export const getDeliveredRewardsController = async (
+  req: Request,
+  res: ExpressResponse
+) => {
+  try {
+    const data = await getDeliveredRewardsService(req);
+
+    return Response({
+      res,
+      data,
+      message: "Delivered rewards fetched successfully",
+      statusCode: STATUS_CODE.OK
+    });
+  } catch (err: any) {
+    return Response({
+      res,
+      data: null,
+      message: err.message,
+      statusCode: STATUS_CODE.INTERNAL_SERVER_ERROR
     });
   }
 };
