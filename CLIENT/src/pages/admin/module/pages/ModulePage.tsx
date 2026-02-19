@@ -142,11 +142,11 @@ export const ModulePage = () => {
   };
 
   return (
-    <div className="p-6  mx-auto space-y-6 w-full h-full">
+    <div className="w-full space-y-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Module Management</h1>
-          <p className="text-gray-500 text-sm mt-1">Manage course modules and content</p>
+          <h1 className="text-[length:var(--font-h1)] leading-[var(--font-h1--line-height)] font-black tracking-tight text-[var(--text-primary)]">Module Management</h1>
+          <p className="text-[length:var(--font-body)] text-[var(--text-secondary)] mt-1">Manage course modules and content</p>
         </div>
 
         {/* Course Search Dropdown */}
@@ -159,17 +159,17 @@ export const ModulePage = () => {
               onChange={handleCourseSearch}
               onFocus={() => setIsDropdownOpen(true)}
               // onBlur={() => setTimeout(() => setIsDropdownOpen(false), 200)} // Delayed close for click
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+              className="w-full pl-10 pr-4 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent transition-all placeholder-[var(--text-placeholder)]"
             />
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
             {isDropdownOpen && (
-              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+              <div className="absolute z-10 w-full mt-1 glass-card rounded-lg shadow-lg max-h-60 overflow-y-auto">
                 {courses.length > 0 ? (
                   courses.map(course => (
                     <div
                       key={course.id}
                       onClick={() => handleSelectCourse(course)}
-                      className="px-4 py-2 hover:bg-gray-50 cursor-pointer text-gray-700 text-sm"
+                      className="px-4 py-2 hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer text-[var(--text-primary)] text-sm"
                     >
                       {course.name}
                     </div>
@@ -185,14 +185,14 @@ export const ModulePage = () => {
       </div>
 
       {!selectedCourse ? (
-        <div className="flex flex-col items-center justify-center p-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200 text-center">
+        <div className="flex flex-col items-center justify-center p-12 glass-card rounded-xl border-dashed border-2 border-[var(--border-color)] text-center">
           <BookOpen className="w-12 h-12 text-gray-300 mb-4" />
           <h3 className="text-lg font-medium text-gray-600">No Course Selected</h3>
           <p className="text-gray-500 mt-2 max-w-sm">Please search and select a course from the search bar above to view and manage its modules.</p>
         </div>
       ) : (
         <div className="space-y-6 animate-in fade-in duration-300">
-          <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+          <div className="flex justify-between items-center glass-card p-6 rounded-xl">
             <div className="flex items-center gap-3">
               <div className="bg-blue-100 p-2 rounded-lg">
                 <BookOpen className="text-blue-600" size={24} />
@@ -204,7 +204,7 @@ export const ModulePage = () => {
             </div>
             <button
               onClick={handleAddModule}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+              className="flex items-center gap-2 px-4 py-2 bg-[var(--accent)] text-white rounded-lg hover:bg-[var(--accent-hover)] transition-colors shadow-lg shadow-blue-500/20"
             >
               <Plus size={18} />
               <span>Add Module</span>
@@ -234,7 +234,7 @@ export const ModulePage = () => {
               {modules.map((module) => (
                 <div
                   key={module.id}
-                  className="bg-white p-5 rounded-xl text-left border border-gray-200 hover:shadow-md transition-shadow group relative overflow-hidden"
+                  className="glass-card p-6 rounded-xl text-left hover:shadow-lg transition-all group relative overflow-hidden"
                 >
                   <div className={`absolute top-0 left-0 w-1 h-full ${module.is_published ? 'bg-green-500' : 'bg-gray-300'}`}></div>
                   <div className="flex flex-col md:flex-row justify-between gap-4 md:items-center">
@@ -247,7 +247,7 @@ export const ModulePage = () => {
                           {module.is_published ? 'Published' : 'Draft'}
                         </span>
                       </div>
-                      <h3 className="text-lg font-semibold text-gray-800">{module.name}</h3>
+                      <h3 className="text-lg font-semibold text-[var(--text-primary)]">{module.name}</h3>
                       <p className="text-gray-600 text-sm mt-1 line-clamp-2">
                         {module.description || "No description provided."}
                       </p>

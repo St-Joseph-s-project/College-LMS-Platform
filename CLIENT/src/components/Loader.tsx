@@ -1,5 +1,5 @@
 import React from "react";
-import NeuralNetworkBackground from "./NeuralNetworkBackground";
+
 
 type LoaderProps = {
   isLoading: boolean
@@ -9,10 +9,9 @@ const Loader: React.FC<LoaderProps> = ({ isLoading }) => {
   if (!isLoading) return null
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-[var(--bg-color)] bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-black transition-colors duration-300">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden backdrop-blur-md bg-white/30 dark:bg-black/30 transition-colors duration-300">
 
-      {/* 1. Shared Background Animation */}
-      <NeuralNetworkBackground />
+
 
       {/* 2. Loader Content (No Card Background) */}
       <div className="relative z-10 flex flex-col items-center justify-center px-12 py-28 rounded-3xl animate-fadeIn max-w-[360px] w-full mx-4 gap-8">
@@ -25,15 +24,7 @@ const Loader: React.FC<LoaderProps> = ({ isLoading }) => {
 
         {/* Typing Text Effect */}
         <div className="flex flex-col items-center gap-2">
-          <h3 className="text-xl font-black text-[var(--text-primary)] neon-text tracking-[0.15em] uppercase">PIXELPREP</h3>
-          <div className="flex flex-col items-center gap-1">
-            <p className="text-[var(--text-secondary)] font-bold text-xs tracking-widest opacity-90">Initializing System</p>
-            <div className="flex gap-1 pt-0.5">
-              <span className="w-1 h-1 rounded-full bg-blue-500 animate-bounce [animation-delay:-0.3s]"></span>
-              <span className="w-1 h-1 rounded-full bg-pink-500 animate-bounce [animation-delay:-0.15s]"></span>
-              <span className="w-1 h-1 rounded-full bg-emerald-500 animate-bounce"></span>
-            </div>
-          </div>
+          <h3 className="text-xl font-black text-[var(--text-primary)] neon-text tracking-[0.15em] uppercase">loading..</h3>
         </div>
 
       </div>

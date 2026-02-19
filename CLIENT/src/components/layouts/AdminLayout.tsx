@@ -39,7 +39,7 @@ const AdminLayout: React.FC = () => {
           padding: "24px 24px 24px 0"
         }}
       >
-        <div className="w-full h-full min-h-[calc(100vh-48px)] bg-white/75 dark:bg-black/50 backdrop-blur-3xl border border-gray-200 dark:border-white/10 rounded-[32px] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] overflow-y-auto p-24 flex flex-col items-start">
+        <div className="w-full h-full min-h-[calc(100vh-48px)] glass-card rounded-[10px] overflow-y-auto p-4 flex flex-col items-start">
           <Outlet />
         </div>
       </main>
