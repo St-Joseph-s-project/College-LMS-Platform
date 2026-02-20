@@ -37,6 +37,29 @@ export interface UpdateSubModuleRequest {
   orderIndex?: number;
 }
 
+export interface Question {
+  questionNo: number;
+  question: string;
+  options: string[];
+  answer: string;
+}
+
+export interface SubModuleContentResponse {
+  id: number;
+  name: string;
+  description: string;
+  type: SubModuleType;
+  content?: string;
+  videoUrl?: string;
+  testContent?: Question[];
+}
+
+export interface UpdateSubModuleContentRequest {
+  content?: string;
+  videoUrl?: string;
+  testContent?: Question[];
+}
+
 export interface ApiResponse<T> {
   success: boolean;
   message: string;

@@ -320,3 +320,123 @@ export const deleteSubModuleService = async (req: any, subModuleId: number) => {
 
   return { message: "Sub-module deleted successfully" };
 };
+
+export const getSubModuleContentService = async (req: any, id: number) => {
+  const tenantPrisma = req.tenantPrisma;
+
+  const subModule = await tenantPrisma.lms_submodule.findUnique({
+    where: { id },
+  });
+
+  if (!subModule) {
+    throw new CustomError({
+      message: "Sub-module not found",
+      statusCode: STATUS_CODE.NOT_FOUND,
+    });
+  }
+
+  let type = "CONTENT";
+  if (subModule.is_test) {
+    type = "TEST";
+  } else if (subModule.video_url) {
+    type = "YT";
+  }
+
+  let testContent = undefined;
+
+  if (type === "TEST") {
+    const questions = await tenantPrisma.lms_submodule_question.findMany({
+      where: { submodule_id: id },
+      include: {
+        lms_question_options: {
+          orderBy: { order_index: "asc" }
+        }
+      },
+      orderBy: { order_index: "asc" }
+    });
+
+    testContent = questions.map((q: any) => {
+      const answerOption = q.lms_question_options.find((opt: any) => opt.is_answer);
+      return {
+        questionNo: q.order_index,
+        question: q.question,
+        options: q.lms_question_options.map((opt: any) => opt.option_text),
+        answer: answerOption ? answerOption.option_text : ""
+      };
+    });
+  }
+
+  return {
+    id: subModule.id,
+    name: subModule.name,
+    description: subModule.description,
+    type,
+    content: subModule.content,
+    ...(type === "YT" && { videoUrl: subModule.video_url }),
+    ...(type === "TEST" && { testContent })
+  };
+};
+
+export const updateSubModuleContentService = async (
+  req: any,
+  id: number,
+  data: any
+) => {
+  const tenantPrisma = req.tenantPrisma;
+
+  const existingSubModule = await tenantPrisma.lms_submodule.findUnique({
+    where: { id },
+  });
+
+  if (!existingSubModule) {
+    throw new CustomError({
+      message: "Sub-module not found",
+      statusCode: STATUS_CODE.NOT_FOUND,
+    });
+  }
+
+  if (existingSubModule.is_test) {
+    if (data.testContent && Array.isArray(data.testContent)) {
+      await tenantPrisma.$transaction(async (prisma: any) => {
+        const existingQuestions = await prisma.lms_submodule_question.findMany({ where: { submodule_id: id } });
+        const questionIds = existingQuestions.map((q: any) => q.id);
+        if (questionIds.length > 0) {
+          await prisma.lms_question_options.deleteMany({ where: { question_id: { in: questionIds } } });
+          await prisma.lms_submodule_question.deleteMany({ where: { id: { in: questionIds } } });
+        }
+
+        for (let i = 0; i < data.testContent.length; i++) {
+          const tc = data.testContent[i];
+          const question = await prisma.lms_submodule_question.create({
+            data: {
+              submodule_id: id,
+              question: tc.question,
+              order_index: tc.questionNo || (i + 1),
+            }
+          });
+          
+          const optionsData = tc.options.map((opt: string, index: number) => ({
+            question_id: question.id,
+            order_index: index + 1,
+            option_text: opt,
+            is_answer: opt === tc.answer
+          }));
+
+          await prisma.lms_question_options.createMany({
+            data: optionsData
+          });
+        }
+      });
+    }
+  } else {
+    await tenantPrisma.lms_submodule.update({
+      where: { id },
+      data: {
+        ...(data.content !== undefined && { content: data.content }),
+        ...(data.videoUrl !== undefined && { video_url: data.videoUrl })
+      }
+    });
+  }
+
+  return { message: "SubModule content updated successfully" };
+};

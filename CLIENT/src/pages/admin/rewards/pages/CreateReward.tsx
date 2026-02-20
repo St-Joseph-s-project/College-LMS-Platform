@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import { Plus, Trash2, Pencil, Search, Filter, Loader, Gift } from "lucide-react";
 import { getAllRewards, deleteReward } from "../api/rewardApi";
 import type { Reward } from "../types/reward";
@@ -18,7 +17,6 @@ const CreateReward = () => {
   const [editingReward, setEditingReward] = useState<Reward | null>(null);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const location = useLocation();
 
   useEffect(() => {
     fetchRewards();

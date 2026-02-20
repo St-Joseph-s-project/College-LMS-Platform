@@ -1,5 +1,13 @@
 import { getApi, postApi, putApi, deleteApi } from "../../../../api/apiservice";
-import type { ApiResponse, SubModule, SubModuleDetailsResponse, CreateSubModuleRequest, UpdateSubModuleRequest } from "../types/subModule";
+import type {
+  ApiResponse,
+  SubModule,
+  SubModuleDetailsResponse,
+  CreateSubModuleRequest,
+  UpdateSubModuleRequest,
+  SubModuleContentResponse,
+  UpdateSubModuleContentRequest,
+} from "../types/subModule";
 
 const BASE_URL = "/admin/submodule";
 
@@ -62,6 +70,26 @@ export const deleteSubModule = async (
 ): Promise<ApiResponse<null>> => {
   const response = await deleteApi({
     url: `${BASE_URL}/delete/${subModuleId}`,
+  });
+  return response;
+};
+
+export const getSubModuleContentById = async (
+  subModuleId: number
+): Promise<ApiResponse<SubModuleContentResponse>> => {
+  const response = await getApi({
+    url: `${BASE_URL}/get-submodule/${subModuleId}`,
+  });
+  return response;
+};
+
+export const updateSubModuleContent = async (
+  subModuleId: number,
+  data: UpdateSubModuleContentRequest
+): Promise<ApiResponse<SubModuleContentResponse>> => {
+  const response = await putApi({
+    url: `${BASE_URL}/update-submodule-content/${subModuleId}`,
+    data,
   });
   return response;
 };

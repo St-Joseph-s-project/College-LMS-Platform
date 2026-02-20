@@ -5,6 +5,7 @@ import { getSubModuleDetails, getAllSubModules, deleteSubModule } from "../api/s
 import type { SubModuleDetailsResponse } from "../types/module";
 import type { SubModule, SubModuleType } from "../types/subModule";
 import SubModuleModal from "../components/SubModuleModal";
+import SubModuleContentModal from "../components/SubModuleContentModal";
 
 export const SubModulePage = () => {
   const { courseId, moduleId } = useParams<{ courseId: string; moduleId: string }>();
@@ -13,6 +14,9 @@ export const SubModulePage = () => {
   const [subModules, setSubModules] = useState<SubModule[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSubModule, setSelectedSubModule] = useState<SubModule | null>(null);
+
+  const [isContentModalOpen, setIsContentModalOpen] = useState(false);
+  const [selectedContentSubModule, setSelectedContentSubModule] = useState<SubModule | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -57,6 +61,11 @@ export const SubModulePage = () => {
   const handleEdit = (subModule: SubModule) => {
     setSelectedSubModule(subModule);
     setIsModalOpen(true);
+  };
+
+  const handleOpenContent = (subModule: SubModule) => {
+    setSelectedContentSubModule(subModule);
+    setIsContentModalOpen(true);
   };
 
   const handleDelete = async (subModuleId: number) => {
@@ -141,7 +150,7 @@ export const SubModulePage = () => {
             className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-sm hover:shadow-md active:scale-95 font-medium whitespace-nowrap"
           >
             <Plus size={18} />
-            <span>Add Item</span>
+            <span>Add Submodule</span>
           </button>
         </div>
       </div>
@@ -179,6 +188,13 @@ export const SubModulePage = () => {
                 </div>
 
                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button
+                    onClick={() => handleOpenContent(item)}
+                    className="p-2 text-blue-600 hover:text-blue-700 hover:bg-blue-100 rounded-lg transition-colors font-medium border border-transparent hover:border-blue-200"
+                    title="Open Content"
+                  >
+                    Open
+                  </button>
                   <button
                     onClick={() => handleEdit(item)}
                     className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
@@ -227,6 +243,16 @@ export const SubModulePage = () => {
         onSuccess={handleSubModuleSuccess}
         subModule={selectedSubModule}
       />
+
+      {selectedContentSubModule && (
+        <SubModuleContentModal
+          isOpen={isContentModalOpen}
+          onClose={() => setIsContentModalOpen(false)}
+          subModuleId={selectedContentSubModule.id}
+          subModuleType={selectedContentSubModule.type}
+          subModuleName={selectedContentSubModule.name}
+        />
+      )}
     </div>
   );
 };

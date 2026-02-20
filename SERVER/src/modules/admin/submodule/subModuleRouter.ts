@@ -1,11 +1,10 @@
 import express from "express";
+import { checkPermission, validateJWT, validateTenant } from "../../../middleware";
+import { getSubModuleDetailsController, getAllSubModulesController, getSubModuleByIdController, createSubModuleController, updateSubModuleController, deleteSubModuleController, getSubModuleContentController, updateSubModuleContentController } from "./subModuleController";
+import { subModuleValidator } from "./subModuleValidator";
 
 const router = express.Router();
 
-
-import { checkPermission, validateJWT, validateTenant } from "../../../middleware";
-import { getSubModuleDetailsController, getAllSubModulesController, getSubModuleByIdController, createSubModuleController, updateSubModuleController, deleteSubModuleController } from "./subModuleController";
-import { subModuleValidator } from "./subModuleValidator";
 
 //this return the name of the course and the name of module and the is_published status of both
 router.get(
@@ -61,6 +60,23 @@ router.delete(
   checkPermission("LMS_SUBMODULE_DELETE"),
   subModuleValidator.deleteSubModule,
   deleteSubModuleController
+);
+
+router.get(
+  "/get-submodule/:id",
+  validateJWT,
+  validateTenant,
+  checkPermission("LMS_SUBMODULE_VIEW"),
+  getSubModuleContentController
+);
+
+router.put(
+  "/update-submodule-content/:id",
+  validateJWT,
+  validateTenant,
+  checkPermission("LMS_SUBMODULE_UPDATE"),
+  subModuleValidator.updateSubModuleContent,
+  updateSubModuleContentController
 );
 
 export default router;

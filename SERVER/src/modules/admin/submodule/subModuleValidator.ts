@@ -51,6 +51,45 @@ export const subModuleValidator = {
 
   deleteSubModule: [
     validator
+  ],
+
+  updateSubModuleContent: [
+    body("content")
+      .optional()
+      .isString()
+      .withMessage("Content must be a string"),
+
+    body("videoUrl")
+      .optional()
+      .isString()
+      .withMessage("Video URL must be a string"),
+
+    body("testContent")
+      .optional()
+      .isArray()
+      .withMessage("Test Content must be an array"),
+
+    body("testContent.*.questionNo")
+      .optional()
+      .isInt()
+      .withMessage("Question number must be an integer"),
+
+    body("testContent.*.question")
+      .optional()
+      .isString()
+      .withMessage("Question must be a string"),
+
+    body("testContent.*.options")
+      .optional()
+      .isArray()
+      .withMessage("Options must be an array"),
+
+    body("testContent.*.answer")
+      .optional()
+      .isString()
+      .withMessage("Answer must be a string"),
+
+    validator
   ]
 };
 

@@ -1,5 +1,5 @@
 import { Request, Response as ExpressResponse } from "express";
-import { getSubModuleDetailsService, getAllSubModulesService, getSubModuleByIdService, createSubModuleService, updateSubModuleService, deleteSubModuleService } from "./subModuleService";
+import { getSubModuleDetailsService, getAllSubModulesService, getSubModuleByIdService, createSubModuleService, updateSubModuleService, deleteSubModuleService, getSubModuleContentService, updateSubModuleContentService } from "./subModuleService";
 import { CustomError, Response } from "../../../utils";
 import { STATUS_CODE } from "../../../constants/appConstants";
 import logger from "../../../config/logger";
@@ -227,6 +227,86 @@ export const deleteSubModuleController = async (
     });
   } catch (err: any) {
     logger.error("Error in deleteSubModuleController:", err);
+    return Response({
+      res,
+      data: null,
+      message: err.message,
+      statusCode:
+        err instanceof CustomError
+          ? err.statusCode
+          : STATUS_CODE.INTERNAL_SERVER_ERROR,
+    });
+  }
+};
+
+export const getSubModuleContentController = async (
+  req: Request,
+  res: ExpressResponse
+) => {
+  try {
+    const subModuleId = Number(req.params.id);
+
+    if (isNaN(subModuleId)) {
+      return Response({
+        res,
+        data: null,
+        message: "Invalid subModuleId",
+        statusCode: STATUS_CODE.BAD_REQUEST,
+      });
+    }
+
+    const subModule = await getSubModuleContentService(req, subModuleId);
+
+    return Response({
+      res,
+      data: subModule,
+      message: "Sub-module content fetched successfully",
+      statusCode: STATUS_CODE.OK,
+    });
+  } catch (err: any) {
+    logger.error("Error in getSubModuleContentController:", err);
+    return Response({
+      res,
+      data: null,
+      message: err.message,
+      statusCode:
+        err instanceof CustomError
+          ? err.statusCode
+          : STATUS_CODE.INTERNAL_SERVER_ERROR,
+    });
+  }
+};
+
+export const updateSubModuleContentController = async (
+  req: Request,
+  res: ExpressResponse
+) => {
+  try {
+    const subModuleId = Number(req.params.id);
+
+    if (isNaN(subModuleId)) {
+      return Response({
+        res,
+        data: null,
+        message: "Invalid subModuleId",
+        statusCode: STATUS_CODE.BAD_REQUEST,
+      });
+    }
+
+    const result = await updateSubModuleContentService(
+      req,
+      subModuleId,
+      req.body
+    );
+
+    return Response({
+      res,
+      data: result,
+      message: "SubModule content updated successfully",
+      statusCode: STATUS_CODE.OK,
+    });
+  } catch (err: any) {
+    logger.error("Error in updateSubModuleContentController:", err);
     return Response({
       res,
       data: null,
