@@ -40,7 +40,16 @@ export const rewardValidator = {
     .withMessage("Coins must be between 1 and 100"),
 
   validator
-]
+],
+
+  updateOrderStatus: [
+    body("status")
+      .exists({ checkFalsy: true })
+      .withMessage("Status is required")
+      .isIn(["PENDING", "APPROVED", "REJECTED", "DELIVERED"])
+      .withMessage("Invalid status. Must be one of: PENDING, APPROVED, REJECTED, DELIVERED"),
+    validator
+  ]
 
 };
 

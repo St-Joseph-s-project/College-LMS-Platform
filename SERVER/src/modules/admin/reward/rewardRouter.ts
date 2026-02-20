@@ -11,30 +11,13 @@ import {
   getRewardByIdController,
   updateRewardController,
   getPendingRewardsController,
-  getDeliveredRewardsController
+  getDeliveredRewardsController,
+  updateOrderStatusController
 } from "./rewardController";
 
 
 
-const uploadPath = "uploads/rewards";
-
-
-// Ensure folder exists
-if (!fs.existsSync(uploadPath)) {
-  fs.mkdirSync(uploadPath, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadPath);
-  },
-  filename: (req, file, cb) => {
-    const uniqueName =
-      Date.now() + "-" + file.originalname.replace(/\s+/g, "");
-    cb(null, uniqueName);
-  },
-});
-
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 
@@ -44,10 +27,6 @@ const router = express.Router();
 router.get("/get-all", validateJWT, validateTenant, checkPermission("LMS_REWARD_VIEW"), getRewardsController)
 
 router.get("/get/:id", validateJWT, validateTenant, checkPermission("LMS_REWARD_VIEW"), getRewardByIdController)
-
-// router.post("/add", validateJWT, validateTenant, checkPermission("LMS_REWARD_ADD"), rewardValidator.createReward, createRewardController)
-
-// router.put("/update/:id", validateJWT, validateTenant, checkPermission("LMS_REWARD_UPDATE"), rewardValidator.updateReward, updateRewardController)
 
 router.post(
   "/add",
@@ -70,9 +49,6 @@ router.put(
 );
 
 
-
-
-
 //newly added routes
 router.get(
   "/track-rewards",
@@ -92,5 +68,15 @@ router.get(
 
 
 router.delete("/delete/:id", validateJWT, validateTenant, checkPermission("LMS_REWARD_DELETE"), deleteRewardController)
+
+
+router.put(
+  "/orders/update-status/:id",
+  validateJWT,
+  validateTenant,
+  checkPermission("LMS_REWARDS_UPDATE"),
+  rewardValidator.updateOrderStatus,
+  updateOrderStatusController
+);
 
 export default router;

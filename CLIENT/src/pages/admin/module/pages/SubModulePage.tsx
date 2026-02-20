@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ChevronRight, Loader, PlayCircle, FileText, CheckSquare, Plus, Pencil, Trash2 } from "lucide-react";
+import { ChevronRight, PlayCircle, FileText, CheckSquare, Plus, Pencil, Trash2 } from "lucide-react";
 import { getSubModuleDetails, getAllSubModules, deleteSubModule } from "../api/subModuleApi";
 import type { SubModuleDetailsResponse } from "../types/module";
 import type { SubModule, SubModuleType } from "../types/subModule";

@@ -5,7 +5,6 @@ import type {
   CreateModuleRequest,
   UpdateModuleRequest,
   UpdateModuleVisibilityRequest,
-  SubModuleDetailsResponse,
 } from "../types/module";
 
 const BASE_URL = "/admin/module";

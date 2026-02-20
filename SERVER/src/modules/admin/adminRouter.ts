@@ -16,14 +16,6 @@ router.use("/submodule", subModuleRouter)
 
 router.use("/module", moduleRouter)
 
-// // this route (put method) is used to update order status
-// router.put(
-//   "/orders/:id/status",
-//   validateJWT,
-//   validateTenant,
-//   checkPermission("LMS_REWARDS_UPDATE"),
-//   updateOrderStatusController
-// );
 router.use("/health", (req, res) => {
   res.json("ADMIN REWARD MODULE HEALTH OK");
 });

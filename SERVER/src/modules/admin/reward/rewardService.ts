@@ -1,5 +1,3 @@
-import fs from "fs";
-import path from "path";
 import { STATUS_CODE } from "../../../constants/appConstants";
 import { CustomError } from "../../../utils";
 
@@ -7,14 +5,19 @@ import { CustomError } from "../../../utils";
 export const createRewardService = async (req: any, data: any, file: any) => {
 
   const tenantPrisma = req.tenantPrisma; // ✅ use injected prisma
+  
+  let base64Image = "";
+  if (file) {
+    base64Image = `data:${file.mimetype};base64,${file.buffer.toString("base64")}`;
+  }
 
   const reward = await tenantPrisma.rewards.create({
     data: {
       title: data.title,
       description: data.description,
       coins: Number(data.coins),
-      image_url: `/uploads/rewards/${file.filename}`,
-      image_key: file.filename,
+      image_url: base64Image,
+      image_key: file ? file.originalname : "no-image",
     },
   });
 
@@ -80,19 +83,7 @@ export const deleteRewardService = async (req: any, id: number) => {
     });
   }
 
-  // 🔥 Delete image from server
-  if (reward.image_key) {
-    const imagePath = path.join(
-      process.cwd(),
-      "uploads",
-      "rewards",
-      reward.image_key
-    );
-
-    if (fs.existsSync(imagePath)) {
-      fs.unlinkSync(imagePath);
-    }
-  }
+  // No file deletion required since it's a base64 string in DB
 
   // Soft delete in DB
   await tenantPrisma.rewards.update({
@@ -102,8 +93,6 @@ export const deleteRewardService = async (req: any, id: number) => {
 
   return true;
 };
-
-
 
 
 //this is the admin service code for update the rewards
@@ -134,21 +123,8 @@ export const updateRewardService = async (
 
   // If new image uploaded
   if (file) {
-    if (existingReward.image_key) {
-      const oldImagePath = path.join(
-        process.cwd(),
-        "uploads",
-        "rewards",
-        existingReward.image_key
-      );
-
-      if (fs.existsSync(oldImagePath)) {
-        fs.unlinkSync(oldImagePath);
-      }
-    }
-
-    imageUrl = `/uploads/rewards/${file.filename}`;
-    imageKey = file.filename;
+    imageUrl = `data:${file.mimetype};base64,${file.buffer.toString("base64")}`;
+    imageKey = file.originalname;
   }
   
   const updatedReward = await tenantPrisma.rewards.update({
@@ -165,28 +141,6 @@ export const updateRewardService = async (
   });
   return updatedReward;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // 🔥 Get all pending reward orders (Track Rewards)
 export const getPendingRewardsService = async (req: any) => {
@@ -249,4 +203,31 @@ export const getDeliveredRewardsService = async (req: any) => {
       delivered_date: "desc",
     },
   });
+};
+
+export const updateOrderStatusService = async (req: any, id: number, status: string) => {
+  const tenantPrisma = req.tenantPrisma;
+
+  const order = await tenantPrisma.users_rewards.findUnique({
+    where: { id }
+  });
+
+  if (!order) {
+    throw new CustomError({
+      message: "Order not found",
+      statusCode: STATUS_CODE.NOT_FOUND
+    });
+  }
+
+  const updateData: any = { status };
+  if (status === "DELIVERED" && order.status !== "DELIVERED") {
+    updateData.delivered_date = new Date();
+  }
+
+  const updatedOrder = await tenantPrisma.users_rewards.update({
+    where: { id },
+    data: updateData
+  });
+
+  return updatedOrder;
 };
