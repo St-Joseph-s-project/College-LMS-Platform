@@ -15,7 +15,7 @@ router.get(
   getSubModuleDetailsController
 );
 
-//this return the all submodules in the course with all the details like if the submodule like the title, description, type -> if there is isTest is true then return is TEST, if there is youtube video link then return YT, else retunr content
+//this return the all submodules in the course with all the details like title, description, and type (YT, CONTENT, TEST)
 router.get(
   "/get-all/:courseId/:moduleId",
   validateJWT,
@@ -33,7 +33,7 @@ router.get(
   getSubModuleByIdController
 );
 
-//this only accept the title and the description[not required always] and the type -> TEST | YT | Content if it is test then make is_test true alone
+//this only accept the title and the description[not required always] and the type -> TEST | YT | CONTENT
 router.post(
   "/add/:courseId/:moduleId",
   validateJWT,

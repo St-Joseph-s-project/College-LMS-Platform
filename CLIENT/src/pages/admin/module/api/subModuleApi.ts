@@ -11,14 +11,13 @@ import type {
 
 const BASE_URL = "/admin/submodule";
 
-
-
 export const getSubModuleDetails = async (
   courseId: number,
   moduleId: number
 ): Promise<ApiResponse<SubModuleDetailsResponse>> => {
   const response = await getApi({
     url: `${BASE_URL}/get-details/${courseId}/${moduleId}`,
+    showLoader: true
   });
   return response;
 };
@@ -29,6 +28,7 @@ export const getAllSubModules = async (
 ): Promise<ApiResponse<SubModule[]>> => {
   const response = await getApi({
     url: `${BASE_URL}/get-all/${courseId}/${moduleId}`,
+    showLoader: true
   });
   return response;
 };

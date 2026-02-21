@@ -62,7 +62,7 @@ export const getAllSubModulesService = async (
       id: true,
       name: true,
       description: true,
-      is_test: true,
+      type: true,
       video_url: true,
       content: true,
       created_at: true,
@@ -73,18 +73,11 @@ export const getAllSubModulesService = async (
   });
 
   const processedSubModules = subModules.map((subModule: any) => {
-    let type = "CONTENT";
-    if (subModule.is_test) {
-      type = "TEST";
-    } else if (subModule.video_url) {
-      type = "YT";
-    }
-
     return {
       id: subModule.id,
       name: subModule.name,
       description: subModule.description,
-      type: type,
+      type: subModule.type,
       video_url: subModule.video_url,
       content: subModule.content,
     };
@@ -128,7 +121,6 @@ export const createSubModuleService = async (
     });
   }
 
-  const isTest = data.type === "TEST";
 
   // Calculate order_index
   let orderIndex = data.orderIndex;
@@ -171,12 +163,8 @@ export const createSubModuleService = async (
       module_id: moduleId,
       name: data.title,
       description: data.description,
-      is_test: isTest,
+      type: data.type,
       order_index: orderIndex,
-      // Note: video_url and content are not set as per requirements, 
-      // implying they might be updated later or inferred type "YT"/ "CONTENT" 
-      // logic in getAll might need adjustment if it relies strictly on video_url presence for YT.
-      // But for now, following strict instruction: "if it is test then make is_test true alone".
     },
   });
 
@@ -243,16 +231,37 @@ export const updateSubModuleService = async (
     }
   }
 
-  const isTest = data.type ? data.type === "TEST" : undefined;
+  const updatedSubModule = await tenantPrisma.$transaction(async (prisma: any) => {
+    if (existingSubModule.type === "TEST" && data.type && data.type !== "TEST") {
+       // Find all questions associated with the submodule
+       const questions = await prisma.lms_submodule_question.findMany({
+         where: { submodule_id: subModuleId },
+         select: { id: true }
+       });
+       const questionIds = questions.map((q: any) => q.id);
+ 
+       if (questionIds.length > 0) {
+         // Delete all question options
+         await prisma.lms_question_options.deleteMany({
+           where: { question_id: { in: questionIds } }
+         });
+ 
+         // Delete all submodule questions
+         await prisma.lms_submodule_question.deleteMany({
+           where: { id: { in: questionIds } }
+         });
+       }
+    }
 
-  const updatedSubModule = await tenantPrisma.lms_submodule.update({
-    where: { id: subModuleId },
-    data: {
-      name: data.title,
-      description: data.description,
-      is_test: isTest,
-      order_index: data.orderIndex,
-    },
+    return await prisma.lms_submodule.update({
+      where: { id: subModuleId },
+      data: {
+        name: data.title,
+        description: data.description,
+        type: data.type,
+        order_index: data.orderIndex,
+      },
+    });
   });
 
   return updatedSubModule;
@@ -335,12 +344,7 @@ export const getSubModuleContentService = async (req: any, id: number) => {
     });
   }
 
-  let type = "CONTENT";
-  if (subModule.is_test) {
-    type = "TEST";
-  } else if (subModule.video_url) {
-    type = "YT";
-  }
+  const type = subModule.type;
 
   let testContent = undefined;
 
@@ -395,7 +399,7 @@ export const updateSubModuleContentService = async (
     });
   }
 
-  if (existingSubModule.is_test) {
+  if (existingSubModule.type === "TEST") {
     if (data.testContent && Array.isArray(data.testContent)) {
       await tenantPrisma.$transaction(async (prisma: any) => {
         const existingQuestions = await prisma.lms_submodule_question.findMany({ where: { submodule_id: id } });

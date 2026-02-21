@@ -1,4 +1,4 @@
-export type SubModuleType = 'TEST' | 'YT' | 'CONTENT';
+export type SubModuleType = 'YT' | 'CONTENT' | 'TEST';
 
 export interface SubModule {
   id: number;
@@ -7,7 +7,6 @@ export interface SubModule {
   type: SubModuleType;
   video_url?: string;
   content?: string;
-  is_test?: boolean;
   created_at?: string;
   order_index?: number;
 }
@@ -24,14 +23,14 @@ export interface SubModuleDetailsResponse {
 }
 
 export interface CreateSubModuleRequest {
-  title: string;
+  name: string;
   description?: string;
   type: SubModuleType;
   orderIndex?: number;
 }
 
 export interface UpdateSubModuleRequest {
-  title?: string;
+  name?: string;
   description?: string;
   type?: SubModuleType;
   orderIndex?: number;
@@ -51,6 +50,7 @@ export interface SubModuleContentResponse {
   type: SubModuleType;
   content?: string;
   videoUrl?: string;
+  order_index?: number;
   testContent?: Question[];
 }
 

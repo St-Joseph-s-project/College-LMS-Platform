@@ -430,18 +430,18 @@ model lms_roadmap_course_mapping {
 model lms_submodule {
   id                      Int                       @id @default(autoincrement())
   module_id               Int
+  order_index             Int
   name                    String                    @db.VarChar(100)
   description             String?
+  type                    lms_submodule_type_enum   @default(CONTENT)
   video_url               String?
   content                 String?
-  is_test                 Boolean?                  @default(false)
   created_at              DateTime?                 @default(now()) @db.Timestamp(6)
   lms_module              lms_module                @relation(fields: [module_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   lms_submodule_question  lms_submodule_question[]
   lms_user_submodule_view lms_user_submodule_view[]
 
   @@index([module_id], map: "idx_lms_submodule_module")
-  @@index([is_test], map: "idx_lms_submodule_test")
   @@index([module_id, order_index], map: "idx_lms_submodule_order")
 }
 
@@ -582,4 +582,10 @@ enum reward_status_enum {
   APPROVED
   REJECTED
   DELIVERED
+}
+
+enum lms_submodule_type_enum {
+  YT
+  CONTENT
+  TEST
 }
