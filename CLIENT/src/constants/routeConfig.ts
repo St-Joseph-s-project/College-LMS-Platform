@@ -20,7 +20,9 @@ import {
   RewardTrack,
   CreateCourse,
   ModulePage,
-  SubModulePage
+  SubModulePage,
+  RoadMapCreate,
+  RoadMapManage
 } from "../pages";
 
 /**
@@ -112,6 +114,29 @@ export const ADMIN_ROUTE_MAP: Record<string, RouteConfig> = {
         label: "Create Submodule",
         icon: React.createElement(Plus, { size: 18 }),
         component: SubModulePage,
+        showInSidebar: false
+      }
+    ]
+  },
+  ROADMAP: {
+    path: "/dashboard/admin/roadmap",
+    permission: ADMIN_PERMISSIONS.ROAMAP.VIEW,
+    label: "RoadMap",
+    icon: React.createElement(Gift, { size: 18 }),
+    children: [
+      {
+        path: "/dashboard/admin/roadmap/create",
+        permission: ADMIN_PERMISSIONS.ROAMAP.CREATE,
+        label: "Roadmap Manage",
+        icon: React.createElement(Plus, { size: 18 }),
+        component: RoadMapCreate,
+      },
+      {
+        path: "/dashboard/admin/roadmap/manage/:roadmapId",
+        permission: ADMIN_PERMISSIONS.ROAMAP.UPDATE,
+        label: "Manage Roadmap",
+        icon: React.createElement(Plus, { size: 18 }),
+        component: RoadMapManage,
         showInSidebar: false
       }
     ]

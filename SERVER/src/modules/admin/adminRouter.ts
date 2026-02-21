@@ -3,7 +3,7 @@ import rewardRouter from "./reward/rewardRouter"
 import courseRouter from "./course/courseRouter"
 import subModuleRouter from "./submodule/subModuleRouter"
 import moduleRouter from "./module/moduleRouter"
-import { validateJWT, validateTenant, checkPermission } from "middleware";
+import roadMapRouter from "./roadmap/roadMapRouter"
 
 
 const router = express.Router();
@@ -15,6 +15,8 @@ router.use("/course", courseRouter)
 router.use("/submodule", subModuleRouter)
 
 router.use("/module", moduleRouter)
+
+router.use("/roadmap", roadMapRouter)
 
 router.use("/health", (req, res) => {
   res.json("ADMIN REWARD MODULE HEALTH OK");

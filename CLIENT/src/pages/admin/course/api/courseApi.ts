@@ -64,7 +64,7 @@ export const getCoursesDropdown = async (search?: string): Promise<ApiResponse<{
   const data = await getApi({
     url: `${BASE_URL}/get-all/dropdown`,
     data: { courseName: search },
-    showLoader: false,
+    showLoader: true,
     showToaster: false
   });
   return data;
