@@ -10,16 +10,7 @@ export const getAllRewardsController = async (req: Request, res: ExpressResponse
         const page = parseInt(req.query.page as string) || 1;
         const limit = parseInt(req.query.limit as string) || 10;
 
-        if (!prisma) {
-            return Response({
-                res,
-                data: null,
-                message: "Tenant database connection not available",
-                statusCode: STATUS_CODE.INTERNAL_SERVER_ERROR
-            });
-        }
-
-        const result = await getAllRewardsService({ prisma, page, limit });
+        const result = await getAllRewardsService(req);
 
         return Response({
             res,
@@ -49,33 +40,7 @@ export const getAllRewardsController = async (req: Request, res: ExpressResponse
 
 export const getClientRewardsHistoryController = async (req: Request, res: ExpressResponse) => {
     try {
-        const prisma = req.tenantPrisma;
-        const page = parseInt(req.query.page as string) || 1;
-        const limit = parseInt(req.query.limit as string) || 10;
-
-        // userId from body (debug) or token
-        // @ts-ignore
-        const userId = req.body.userId || req.user?.userId;
-
-        if (!prisma) {
-            return Response({
-                res,
-                data: null,
-                message: "Tenant database connection not available",
-                statusCode: STATUS_CODE.INTERNAL_SERVER_ERROR
-            });
-        }
-
-        if (!userId) {
-            return Response({
-                res,
-                data: null,
-                message: "User ID is required",
-                statusCode: STATUS_CODE.UNAUTHORIZED,
-            });
-        }
-
-        const result = await getClientRewardsHistoryService({ prisma, userId: Number(userId), page, limit });
+        const result = await getClientRewardsHistoryService(req);
 
         return Response({
             res,
@@ -105,18 +70,7 @@ export const getClientRewardsHistoryController = async (req: Request, res: Expre
 
 export const getRewardByIdController = async (req: Request, res: ExpressResponse) => {
     try {
-        const prisma = req.tenantPrisma;
-
-        if (!prisma) {
-            return Response({
-                res,
-                data: null,
-                message: "Tenant database connection not available",
-                statusCode: STATUS_CODE.INTERNAL_SERVER_ERROR
-            });
-        }
-
-        const reward = await getRewardByIdService({ prisma, id: Number(req.params.id) });
+        const reward = await getRewardByIdService(req, Number(req.params.id));
 
         return Response({
             res,
@@ -146,28 +100,7 @@ export const getRewardByIdController = async (req: Request, res: ExpressResponse
 
 export const buyRewardController = async (req: Request, res: ExpressResponse) => {
     try {
-        const prisma = req.tenantPrisma;
         const rewardId = req.params.id;
-
-        const userId = req.body.userId || req.user?.userId;
-
-        if (!prisma) {
-            return Response({
-                res,
-                data: null,
-                message: "Tenant database connection not available",
-                statusCode: STATUS_CODE.INTERNAL_SERVER_ERROR
-            });
-        }
-
-        if (!userId) {
-            return Response({
-                res,
-                data: null,
-                message: "User ID is required",
-                statusCode: STATUS_CODE.UNAUTHORIZED,
-            });
-        }
 
         if (!rewardId) {
             return Response({
@@ -178,7 +111,7 @@ export const buyRewardController = async (req: Request, res: ExpressResponse) =>
             });
         }
 
-        const result = await buyRewardService({ prisma, userId: Number(userId), rewardId: Number(rewardId) });
+        const result = await buyRewardService(req, Number(rewardId));
 
         return Response({
             res,

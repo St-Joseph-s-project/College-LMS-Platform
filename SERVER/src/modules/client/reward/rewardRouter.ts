@@ -8,7 +8,6 @@ router.get(
   "/get-all",
   validateJWT,
   validateTenant,
-  checkPermission("LMS_REWARD_VIEW"),
   getAllRewardsController,
 );
 
@@ -23,7 +22,6 @@ router.get(
   "/get/:id",
   validateJWT,
   validateTenant,
-  checkPermission("LMS_REWARD_VIEW"),
   getRewardByIdController,
 )
 
@@ -33,9 +31,6 @@ router.post(
   validateTenant,
   buyRewardController,
 );
-
-
-
 
 
 router.use("/health", (req, res) => {

@@ -33,6 +33,12 @@ export const getRewardsService = async (req: any) => {
 
   return await tenantPrisma.rewards.findMany({
     where: { is_deleted: false },
+    select: {
+      id: true,
+      title: true,
+      coins: true,
+      created_at: true,
+    },
     orderBy: { created_at: "desc" }
   });
 };
@@ -45,9 +51,14 @@ export const getRewardByIdService = async (req: any, id: number) => {
   const tenantPrisma = req.tenantPrisma;
 
   const reward = await tenantPrisma.rewards.findFirst({
-    where: {
-      id,
-      is_deleted: false
+    where: { id, is_deleted: false },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      coins: true,
+      image_url: true,
+      created_at: true,
     }
   });
 
@@ -70,10 +81,8 @@ export const deleteRewardService = async (req: any, id: number) => {
   const tenantPrisma = req.tenantPrisma;
 
   const reward = await tenantPrisma.rewards.findFirst({
-    where: {
-      id,
-      is_deleted: false
-    }
+    where: { id, is_deleted: false },
+    select: { id: true }
   });
 
   if (!reward) {
@@ -105,10 +114,8 @@ export const updateRewardService = async (
   const tenantPrisma = req.tenantPrisma;
 
   const existingReward = await tenantPrisma.rewards.findFirst({
-    where: {
-      id,
-      is_deleted: false
-    }
+    where: { id, is_deleted: false },
+    select: { id: true, image_url: true, image_key: true, title: true, description: true, coins: true }
   });
 
   if (!existingReward) {
@@ -147,29 +154,19 @@ export const getPendingRewardsService = async (req: any) => {
   const tenantPrisma = req.tenantPrisma;
 
   return await tenantPrisma.users_rewards.findMany({
-    where: {
-      status: "PENDING",
-    },
-    include: {
+    where: { status: "PENDING" },
+    select: {
+      id: true,
+      status: true,
+      ordered_date: true,
       users: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-        },
+        select: { id: true, name: true, email: true }
       },
       rewards: {
-        select: {
-          id: true,
-          title: true,
-          coins: true,
-          image_url: true,
-        },
-      },
+        select: { id: true, title: true, coins: true, image_url: true }
+      }
     },
-    orderBy: {
-      ordered_date: "desc",
-    },
+    orderBy: { ordered_date: "desc" },
   });
 };
 
@@ -179,29 +176,19 @@ export const getDeliveredRewardsService = async (req: any) => {
   const tenantPrisma = req.tenantPrisma;
 
   return await tenantPrisma.users_rewards.findMany({
-    where: {
-      status: "DELIVERED",
-    },
-    include: {
+    where: { status: "DELIVERED" },
+    select: {
+      id: true,
+      status: true,
+      delivered_date: true,
       users: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-        },
+        select: { id: true, name: true, email: true }
       },
       rewards: {
-        select: {
-          id: true,
-          title: true,
-          coins: true,
-          image_url: true,
-        },
-      },
+        select: { id: true, title: true, coins: true, image_url: true }
+      }
     },
-    orderBy: {
-      delivered_date: "desc",
-    },
+    orderBy: { delivered_date: "desc" },
   });
 };
 
@@ -209,7 +196,8 @@ export const updateOrderStatusService = async (req: any, id: number, status: str
   const tenantPrisma = req.tenantPrisma;
 
   const order = await tenantPrisma.users_rewards.findUnique({
-    where: { id }
+    where: { id },
+    select: { id: true, status: true }
   });
 
   if (!order) {
