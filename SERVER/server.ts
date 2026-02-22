@@ -1,7 +1,7 @@
 import "dotenv/config";
 import appRouter from "./src/app";
 import { logger, connectDB } from "./src/config/index";
-import { seedCredentials, seedPermissions } from "./src/config/dbSeeder"
+import { seedCredentials, seedPermissions , clearTables} from "./src/config/dbSeeder"
 import cors from "cors";
 import helmet from "helmet";
 import express from "express"
@@ -41,8 +41,10 @@ const startServer = async () => {
   try {
     await connectDB();
     // seed required data before accepting requests
-    // await seedPermissions("sjit");
+    // await clearTables("sjit")
     // await seedCredentials("sjit");
+    // await seedPermissions("sjit");
+    
 
     app.listen(PORT, () => {
       logger.info(`Server is running on port ${PORT}`);

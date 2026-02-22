@@ -148,17 +148,12 @@ export const getRoadmapCoursesService = async (req: any, roadmapId: number) => {
 export const getAvailableCoursesDropdownService = async (req: any, roadmapId: number) => {
   const tenantPrisma = req.tenantPrisma;
   
-  // Courses NOT already in the roadmap
-  const alreadyMapped = await tenantPrisma.lms_roadmap_course_mapping.findMany({
-    where: { roadmap_id: roadmapId },
-    select: { course_id: true },
-  });
-  
-  const mappedIds = alreadyMapped.map((m: any) => m.course_id);
-  
+  // Courses NOT linked to ANY roadmap
   const courses = await tenantPrisma.lms_course.findMany({
     where: {
-      id: { notIn: mappedIds },
+      lms_roadmap_course_mapping: {
+        none: {},
+      },
     },
     select: { id: true, name: true },
     orderBy: { name: "asc" },

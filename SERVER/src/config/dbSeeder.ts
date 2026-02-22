@@ -145,3 +145,46 @@ export async function seedCredentials(uniq_string: string): Promise<void> {
 		throw error;
 	}
 }
+
+export async function clearTables(uniq_string: string): Promise<void> {
+  try {
+    const adminPrisma = getAdminPrisma();
+
+    // Fetch tenant info
+    const tenant = await adminPrisma.tenants.findUnique({
+      where: { uniq_string },
+      select: { id: true, db_string: true, college_name: true },
+    });
+
+    if (!tenant) {
+      throw new Error(`Tenant with uniq_string '${uniq_string}' not found`);
+    }
+
+    logger.info(`Clearing all tables for: ${tenant.college_name}`);
+
+    // Get tenant database connection
+    const tenantPrisma = getTenantConnection(tenant.db_string, tenant.id);
+
+    // Get all user tables in the public schema
+    const tables: any[] = await tenantPrisma.$queryRawUnsafe(`
+      SELECT tablename FROM pg_catalog.pg_tables 
+      WHERE schemaname = 'public' 
+      AND tablename NOT IN ('_prisma_migrations', 'spatial_ref_sys')
+    `);
+
+    if (tables.length === 0) {
+      logger.info("No tables to clear");
+      return;
+    }
+
+    const tableNames = tables.map((t) => `"${t.tablename}"`).join(", ");
+
+  
+    await tenantPrisma.$executeRawUnsafe(`TRUNCATE TABLE ${tableNames} CASCADE;`);
+
+    logger.info(`✅ Successfully cleared all tables for ${tenant.college_name}`);
+  } catch (err) {
+    logger.error(`error while clearing the tables in the database ${uniq_string}`, err);
+    throw err;
+  }
+}

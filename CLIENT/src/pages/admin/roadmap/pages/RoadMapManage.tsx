@@ -4,7 +4,6 @@ import {
   ArrowLeft,
   Map as MapIcon,
   Plus,
-  Settings,
   Trash2,
   Edit,
   ChevronRight,
