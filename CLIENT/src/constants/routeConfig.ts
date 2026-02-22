@@ -7,7 +7,16 @@ import {
   TrendingUp,
   History,
   ShoppingBag,
-  BarChart3
+  BarChart3,
+  BookOpen,
+  FilePlus,
+  Layers,
+  FileText,
+  Map,
+  Settings2,
+  MapPin,
+  Library,
+  Book
 } from "lucide-react";
 import { ADMIN_PERMISSIONS } from "./permissions";
 import {
@@ -22,7 +31,10 @@ import {
   ModulePage,
   SubModulePage,
   RoadMapCreate,
-  RoadMapManage
+  RoadMapManage,
+  ClientRoadMap,
+  ClientAllCourse,
+  ClientCourse
 } from "../pages";
 
 /**
@@ -83,20 +95,20 @@ export const ADMIN_ROUTE_MAP: Record<string, RouteConfig> = {
     path: "/dashboard/admin/course",
     permission: ADMIN_PERMISSIONS.COURSE.VIEW,
     label: "Course",
-    icon: React.createElement(Gift, { size: 18 }),
+    icon: React.createElement(BookOpen, { size: 18 }),
     children: [
       {
         path: "/dashboard/admin/couse/create",
         permission: ADMIN_PERMISSIONS.COURSE.CREATE,
         label: "Create Course",
-        icon: React.createElement(Plus, { size: 18 }),
+        icon: React.createElement(FilePlus, { size: 18 }),
         component: CreateCourse,
       },
       {
         path: "/dashboard/admin/module/create",
         permission: ADMIN_PERMISSIONS.MODULE.CREATE,
         label: "Create Module",
-        icon: React.createElement(Plus, { size: 18 }),
+        icon: React.createElement(Layers, { size: 18 }),
         component: ModulePage,
         
       },
@@ -104,7 +116,7 @@ export const ADMIN_ROUTE_MAP: Record<string, RouteConfig> = {
         path: "/dashboard/admin/module/create/:courseId",
         permission: ADMIN_PERMISSIONS.MODULE.CREATE,
         label: "Create Module",
-        icon: React.createElement(Plus, { size: 18 }),
+        icon: React.createElement(Layers, { size: 18 }),
         component: ModulePage,
         showInSidebar: false
       },
@@ -112,7 +124,7 @@ export const ADMIN_ROUTE_MAP: Record<string, RouteConfig> = {
         path: "/dashboard/admin/submodule/:courseId/:moduleId",
         permission: ADMIN_PERMISSIONS.SUBMODULE.CREATE,
         label: "Create Submodule",
-        icon: React.createElement(Plus, { size: 18 }),
+        icon: React.createElement(FileText, { size: 18 }),
         component: SubModulePage,
         showInSidebar: false
       }
@@ -122,20 +134,20 @@ export const ADMIN_ROUTE_MAP: Record<string, RouteConfig> = {
     path: "/dashboard/admin/roadmap",
     permission: ADMIN_PERMISSIONS.ROAMAP.VIEW,
     label: "RoadMap",
-    icon: React.createElement(Gift, { size: 18 }),
+    icon: React.createElement(Map, { size: 18 }),
     children: [
       {
         path: "/dashboard/admin/roadmap/create",
         permission: ADMIN_PERMISSIONS.ROAMAP.CREATE,
         label: "Roadmap Manage",
-        icon: React.createElement(Plus, { size: 18 }),
+        icon: React.createElement(Settings2, { size: 18 }),
         component: RoadMapCreate,
       },
       {
         path: "/dashboard/admin/roadmap/manage/:roadmapId",
         permission: ADMIN_PERMISSIONS.ROAMAP.UPDATE,
         label: "Manage Roadmap",
-        icon: React.createElement(Plus, { size: 18 }),
+        icon: React.createElement(MapPin, { size: 18 }),
         component: RoadMapManage,
         showInSidebar: false
       }
@@ -174,6 +186,37 @@ export const CLIENT_ROUTE_MAP: Record<string, RouteConfig> = {
         icon: React.createElement(BarChart3, { size: 18 }),
         component: RewardTrack,
       },
+    ],
+  },
+  ROADMAP: {
+    path: "/dashboard/student/roadmap",
+    permission: "client.access", // Generic permission - not used for filtering
+    label: "RoadMap",
+    icon: React.createElement(Map, { size: 18 }),
+    children: [
+      {
+        path: "/dashboard/student/roadmap/all-roadmap",
+        permission: "client.access", // Generic permission - not used for filtering
+        label: "All Roadmaps",
+        icon: React.createElement(Library, { size: 18 }),
+        component: ClientRoadMap,
+      },
+      {
+        path: "/dashboard/student/roadmap/all-course/:roadmapId",
+        permission: "client.access", // Generic permission - not used for filtering
+        label: "All Course",
+        icon: React.createElement(BookOpen, { size: 18 }),
+        component: ClientAllCourse,
+        showInSidebar: false
+      },
+      {
+        path: "/dashboard/student/roadmap/course/:courseId",
+        permission: "client.access", // Generic permission - not used for filtering
+        label: "Course",
+        icon: React.createElement(Book, { size: 18 }),
+        component: ClientCourse,
+        showInSidebar: false  
+      }
     ],
   },
 };

@@ -20,11 +20,12 @@ const RewardStore = () => {
   }, []);
 
   const fetchRewards = async () => {
-
     try {
       const res = await getAllRewards();
-      if (res) {
-        setRewards(res.data.data);
+      if (res?.data) {
+        // Handle both possible structures: res.data.data (paginated) or res.data (flat)
+        const rewardsData = res.data.data || res.data;
+        setRewards(Array.isArray(rewardsData) ? rewardsData : []);
       }
     } catch (error) {
       console.error("Failed to fetch rewards", error);
@@ -46,9 +47,9 @@ const RewardStore = () => {
     }
   };
 
-  const filteredRewards = rewards.filter(r =>
-    r.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    r.description.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredRewards = (rewards || []).filter(r =>
+    r.title?.toLowerCase().includes((searchQuery || "").toLowerCase()) ||
+    r.description?.toLowerCase().includes((searchQuery || "").toLowerCase())
   );
 
   return (
