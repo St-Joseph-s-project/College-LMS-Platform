@@ -3,10 +3,14 @@ import {
   createRewardService,
   getRewardsService,
   deleteRewardService,
-  getRewardByIdService
-} from "./adminService";
-import { CustomError, Response } from "../../utils";
-import { STATUS_CODE } from "../../constants/appConstants";
+  getRewardByIdService,
+  updateRewardService,
+  getDeliveredRewardsService,
+  getPendingRewardsService,
+  updateOrderStatusService
+} from "./rewardService";
+import { CustomError, Response } from "../../../utils";
+import { STATUS_CODE } from "../../../constants/appConstants";
 
 
 
@@ -135,8 +139,7 @@ export const deleteRewardController = async (req: Request, res: ExpressResponse)
 
 
 
-// this is the code to update the rewards details 
-import { updateRewardService } from "./adminService";
+
 
 export const updateRewardController = async (
   req: Request,
@@ -159,6 +162,85 @@ export const updateRewardController = async (
       statusCode: STATUS_CODE.OK
     });
 
+  } catch (err: any) {
+    return Response({
+      res,
+      data: null,
+      message: err.message,
+      statusCode:
+        err instanceof CustomError
+          ? err.statusCode
+          : STATUS_CODE.INTERNAL_SERVER_ERROR
+    });
+  }
+};
+
+
+
+// 🔥 Track Rewards (Pending)
+export const getPendingRewardsController = async (
+  req: Request,
+  res: ExpressResponse
+) => {
+  try {
+    const data = await getPendingRewardsService(req);
+
+    return Response({
+      res,
+      data,
+      message: "Pending rewards fetched successfully",
+      statusCode: STATUS_CODE.OK
+    });
+  } catch (err: any) {
+    return Response({
+      res,
+      data: null,
+      message: err.message,
+      statusCode: STATUS_CODE.INTERNAL_SERVER_ERROR
+    });
+  }
+};
+
+
+export const getDeliveredRewardsController = async (
+  req: Request,
+  res: ExpressResponse
+) => {
+  try {
+    const data = await getDeliveredRewardsService(req);
+
+    return Response({
+      res,
+      data,
+      message: "Delivered rewards fetched successfully",
+      statusCode: STATUS_CODE.OK
+    });
+  } catch (err: any) {
+    return Response({
+      res,
+      data: null,
+      message: err.message,
+      statusCode: STATUS_CODE.INTERNAL_SERVER_ERROR
+    });
+  }
+};
+
+export const updateOrderStatusController = async (
+  req: Request,
+  res: ExpressResponse
+) => {
+  try {
+    const id = Number(req.params.id);
+    const { status } = req.body;
+
+    const data = await updateOrderStatusService(req, id, status);
+
+    return Response({
+      res,
+      data,
+      message: `Order status updated to ${status} successfully`,
+      statusCode: STATUS_CODE.OK
+    });
   } catch (err: any) {
     return Response({
       res,

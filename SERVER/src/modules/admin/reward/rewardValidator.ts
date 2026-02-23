@@ -1,9 +1,9 @@
 import { body, validationResult } from "express-validator";
 import { Request, Response as ExpressResponse, NextFunction } from "express";
-import { Response } from "../../utils";
-import { STATUS_CODE } from "../../constants/appConstants";
+import { Response } from "../../../utils";
+import { STATUS_CODE } from "../../../constants/appConstants";
 
-export const adminValidators = {
+export const rewardValidator = {
 
   createReward: [
     body("title")
@@ -40,7 +40,16 @@ export const adminValidators = {
     .withMessage("Coins must be between 1 and 100"),
 
   validator
-]
+],
+
+  updateOrderStatus: [
+    body("status")
+      .exists({ checkFalsy: true })
+      .withMessage("Status is required")
+      .isIn(["PENDING", "APPROVED", "REJECTED", "DELIVERED"])
+      .withMessage("Invalid status. Must be one of: PENDING, APPROVED, REJECTED, DELIVERED"),
+    validator
+  ]
 
 };
 

@@ -1,44 +1,38 @@
 import React from "react";
-import NeuralNetworkBackground from "./NeuralNetworkBackground";
+import { Loader2 } from "lucide-react";
 
 type LoaderProps = {
-  isLoading: boolean
-}
+  isLoading: boolean;
+};
 
 const Loader: React.FC<LoaderProps> = ({ isLoading }) => {
-  if (!isLoading) return null
+  if (!isLoading) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-[var(--bg-color)] bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-black transition-colors duration-300">
-
-      {/* 1. Shared Background Animation */}
-      <NeuralNetworkBackground />
-
-      {/* 2. Loader Content (No Card Background) */}
-      <div className="relative z-10 flex flex-col items-center justify-center px-12 py-28 rounded-3xl animate-fadeIn max-w-[360px] w-full mx-4 gap-8">
-
-        {/* Fun Animation: Spinning Rings */}
-        <div className="relative w-12 h-12 flex items-center justify-center">
-          {/* Outer spinning ring */}
-          <div className="absolute inset-0 border-4 border-transparent border-t-blue-500 border-r-pink-500 rounded-full animate-spin shadow-[0_0_8px_rgba(59,130,246,0.3)]"></div>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[var(--bg-color)]/20 dark:bg-[var(--bg-color)]/40 backdrop-blur-xl transition-all duration-300 animate-in fade-in">
+      <div className="flex flex-col items-center gap-6 p-8 rounded-xl bg-[var(--surface-color)] border border-[var(--border-color)] shadow-lg shadow-[var(--accent)]/5">
+        {/* Refined Spinner */}
+        <div className="relative flex items-center justify-center">
+          <Loader2
+            className="w-12 h-12 text-[var(--accent)] animate-spin"
+            strokeWidth={1.5}
+          />
+          {/* Subtle pulse ring */}
+          <div className="absolute inset-0 w-12 h-12 border-4 border-[var(--accent)]/20 rounded-full animate-ping shadow-[0_0_15px_var(--accent)] opacity-20"></div>
         </div>
 
-        {/* Typing Text Effect */}
+        {/* Minimal Loading Text */}
         <div className="flex flex-col items-center gap-2">
-          <h3 className="text-xl font-black text-[var(--text-primary)] neon-text tracking-[0.15em] uppercase">PIXELPREP</h3>
-          <div className="flex flex-col items-center gap-1">
-            <p className="text-[var(--text-secondary)] font-bold text-xs tracking-widest opacity-90">Initializing System</p>
-            <div className="flex gap-1 pt-0.5">
-              <span className="w-1 h-1 rounded-full bg-blue-500 animate-bounce [animation-delay:-0.3s]"></span>
-              <span className="w-1 h-1 rounded-full bg-pink-500 animate-bounce [animation-delay:-0.15s]"></span>
-              <span className="w-1 h-1 rounded-full bg-emerald-500 animate-bounce"></span>
-            </div>
+          <span className="text-sm font-bold text-[var(--text-primary)] tracking-[0.3em] uppercase opacity-80 animate-pulse">
+            Processing
+          </span>
+          <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent rounded-full overflow-hidden">
+            <div className="w-full h-full bg-[var(--accent)] animate-shimmer opacity-80"></div>
           </div>
         </div>
-
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Loader
+export default Loader;

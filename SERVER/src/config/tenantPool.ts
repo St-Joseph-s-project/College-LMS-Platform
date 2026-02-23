@@ -47,7 +47,7 @@ export function getTenantConnection(db_string: string, college_id: number): Tena
   };
 
   connectionMap.set(db_string, newConnection);
-  logger.info(`✅ Created new Prisma Client for college ${college_id}. Active tenants: ${connectionMap.size}`);
+  logger.info(`Created new Prisma Client for college ${college_id}. Active tenants: ${connectionMap.size}`);
 
   return client;
 }

@@ -14,7 +14,7 @@ let adminPrisma: AdminPrismaClient | null = null;
 export function getAdminPrisma(): AdminPrismaClient {
   if (!adminPrisma) {
     const adminDbUrl = process.env.ADMIN_DATABASE_URL;
-    
+
     if (!adminDbUrl) {
       throw new Error('ADMIN_DATABASE_URL is not set in environment variables');
     }
